@@ -90,7 +90,7 @@ export default {
 }
 
 #logo {
-    color: orange;
+    color: rgb(255, 136, 0);
     margin-right: 10px;
     cursor:default;
 }

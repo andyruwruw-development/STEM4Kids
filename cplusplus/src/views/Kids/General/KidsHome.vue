@@ -20,6 +20,18 @@ export default {
     return {
       path: [{title: "C++", index: 0, path: "", current: true}]
     }
+  },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    }
+  },
+  created() {
+    if (this.user == null)
+    {
+      console.log("hello");
+      this.$router.push("login");
+    }
   }
 }
 </script>
