@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const express = require("express");
 const router = express.Router();
-const router = express.Router();
 const auth = require("./auth.js");
 
 const admins = require("./admins.js");

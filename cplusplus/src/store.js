@@ -6,6 +6,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    switch: true,
+
     user: null,
     parent: null,
     admin: null,
@@ -15,8 +17,14 @@ export default new Vuex.Store({
     lesson: null,
     exercise: null,
     quiz: null,
+
+    path: null,
   },
   mutations: {
+    setSwitch(state, value) {
+      state.switch = value;
+    },
+
     setUser(state, user) {
       state.user = user;
     },
@@ -26,6 +34,11 @@ export default new Vuex.Store({
     setAdmin(state, admin) {
       state.admin = admin;
     },
+
+    setList(state, list) {
+      state.list = list;
+    },
+
     setLesson(state, lesson) {
       state.lesson = lesson;
     },
@@ -37,10 +50,20 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    async switchToggle(context, payload) {
+      try {
+        context.commit('setSwitch', payload.value);
+        return "";
+      } catch (error) {
+        return error.response.data.message;
+      }
+    },
     // Children Accounts.
     async registerChild(context, data) {
       try {
+        console.log("Attempting Registration");
         let response = await axios.post("/api/users", data);
+        console.log(response);
         context.commit('setUser', response.data);
         return "";
       } catch (error) {
@@ -69,6 +92,16 @@ export default new Vuex.Store({
       try {
         let response = await axios.get("/api/users");
         context.commit('setUser', response.data);
+        return "";
+      } catch (error) {
+        return "";
+      }
+    },
+    // List Retrival
+    async getLessonList(context, payload) {
+      try {
+        let response = await axios.get("/api/users");
+        context.commit('setList', response.data);
         return "";
       } catch (error) {
         return "";

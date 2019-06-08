@@ -56,12 +56,12 @@ export default new Router({
       component: Lesson
     },
     {
-      path: '/exercise/:subject/:topicIndex/:index',
+      path: '/:subject/exercise/:topicIndex/:index',
       name: 'exercise',
       component: Exercise
     },
     {
-      path: '/quiz/:subject/:topicIndex/:index',
+      path: '/:subject/quiz/:topicIndex/:index',
       name: 'quiz',
       component: Quiz
     },

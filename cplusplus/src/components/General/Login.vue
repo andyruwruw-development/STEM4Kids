@@ -4,9 +4,9 @@
         <h2>Welcome!</h2>
         <h1>Let's Login and Get Started.</h1>
         <input v-bind:class="{filled: username != ''}" v-model="username" type="text" placeholder="Username"/><p/>
-        <input type="password" placeholder="Password"/><p/>
-        <button>I'm New</button>
-        <button>Let's Go!</button>
+        <input type="password" v-model="password" placeholder="Password"/><p/>
+        <button @click="registerInstead">I'm New</button>
+        <button @click="login">Let's Go!</button>
     </div>
   </div>
 </template>
@@ -22,10 +22,18 @@ export default {
       }
   },
   methods: {
-      login() {
-          
+      async login() {
+        await this.$store.dispatch("loginChild", {username: this.username, password: this.password});
+        console.log("Sending to New Location");
+        this.$router.push("/");
+      },
+      registerInstead() {
+        this.$store.dispatch("switchToggle", {value: false});
       }
-  }
+  },
+  computed: {
+
+  },
 }
 </script>
 
@@ -88,7 +96,8 @@ button {
 }
 
 button:hover {
-    background-color:rgba(179, 179, 179, 0.397);
+    background-color: rgba(243, 243, 243, 0.164);
+    color: orange;
     animation: wiggle .3s ease;
 }
 

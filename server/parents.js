@@ -6,14 +6,14 @@ const auth = require("./auth.js");
 
 const SALT_WORK_FACTOR = 10;
 
-const adminSchema = new mongoose.Schema({
+const parentSchema = new mongoose.Schema({
   username: String,
   password: String,
   name: String,
   tokens: [],
 });
 
-adminSchema.pre('save', async function(next) {
+parentSchema.pre('save', async function(next) {
   // only hash the password if it has been modified (or is new)
   if (!this.isModified('password'))
     return next();
@@ -34,7 +34,7 @@ adminSchema.pre('save', async function(next) {
   }
 });
 
-adminSchema.methods.comparePassword = async function(password) {
+parentSchema.methods.comparePassword = async function(password) {
   try {
     const isMatch = await bcrypt.compare(password, this.password);
     return isMatch;
@@ -43,27 +43,27 @@ adminSchema.methods.comparePassword = async function(password) {
   }
 };
 
-adminSchema.methods.toJSON = function() {
+parentSchema.methods.toJSON = function() {
   var obj = this.toObject();
   delete obj.password;
   delete obj.tokens;
   return obj;
 }
 
-adminSchema.methods.addToken = function(token) {
+parentSchema.methods.addToken = function(token) {
   this.tokens.push(token);
 }
 
-adminSchema.methods.removeToken = function(token) {
+parentSchema.methods.removeToken = function(token) {
   this.tokens = this.tokens.filter(t => t != token);
 }
 
-adminSchema.methods.removeOldTokens = function() {
+parentSchema.methods.removeOldTokens = function() {
   this.tokens = auth.removeOldTokens(this.tokens);
 }
 
 // middleware to validate user account
-adminSchema.statics.verify = async function(req, res, next) {
+parentSchema.statics.verify = async function(req, res, next) {
   // look up user account
   const user = await User.findOne({
     _id: req.user_id
@@ -78,7 +78,7 @@ adminSchema.statics.verify = async function(req, res, next) {
   next();
 }
 
-const Admin = mongoose.model('Admin', adminSchema);
+const Parent = mongoose.model('Parent', parentSchema);
 
 // create a new user
 router.post('/', async (req, res) => {
@@ -90,22 +90,22 @@ router.post('/', async (req, res) => {
   try {
 
     //  check to see if username already exists
-    const existingAdmin = await Admin.findOne({
+    const existingParent = await Parent.findOne({
       username: req.body.username
     });
-    if (existingAdmin)
+    if (existingParent)
       return res.status(403).send({
         message: "That username already exists."
       });
 
     // create new user
-    const admin = new Admin({
+    const parent = new Parent({
       username: req.body.username,
       password: req.body.password,
       name: req.body.name
     });
-    await admin.save();
-    login(admin, res);
+    await parent.save();
+    login(parent, res);
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -121,21 +121,21 @@ router.post('/login', async (req, res) => {
 
   try {
     //  lookup user record
-    const existingAdmin = await Admin.findOne({
+    const existingParent = await Parent.findOne({
       username: req.body.username
     });
-    if (!existingAdmin)
+    if (!existingParent)
       return res.status(403).send({
         message: "The username or password is wrong."
       });
 
     // check password
-    if (!await existingAdmin.comparePassword(req.body.password))
+    if (!await existingParent.comparePassword(req.body.password))
       return res.status(403).send({
         message: "The username or password is wrong."
       });
 
-    login(existingAdmin, res);
+    login(existingParent, res);
 
   } catch (error) {
     console.log(error);
@@ -143,36 +143,36 @@ router.post('/login', async (req, res) => {
   }
 });
 
-async function login(admin, res) {
+async function login(parent, res) {
   let token = auth.generateToken({
-    id: admin._id
+    id: parent._id
   }, "24h");
 
-  admin.removeOldTokens();
-  admin.addToken(token);
-  await admin.save();
+  parent.removeOldTokens();
+  parent.addToken(token);
+  await parent.save();
 
   return res
     .cookie("token", token, {
       expires: new Date(Date.now() + 86400 * 1000)
     })
-    .status(200).send(admin);
+    .status(200).send(parent);
 }
 
 // Logout
-router.delete("/", auth.verifyToken, Admin.verify, async (req, res) => {
-  req.admin.removeToken(req.token);
+router.delete("/", auth.verifyToken, Parent.verify, async (req, res) => {
+  req.parent.removeToken(req.token);
   await req.user.save();
   res.clearCookie('token');
   res.sendStatus(200);
 });
 
 // Get current user if logged in.
-router.get('/', auth.verifyToken, Admin.verify, async (req, res) => {
-  return res.send(req.admin);
+router.get('/', auth.verifyToken, Parent.verify, async (req, res) => {
+  return res.send(req.parent);
 });
 
 module.exports = {
-  model: Admin,
+  model: Parent,
   routes: router,
 }

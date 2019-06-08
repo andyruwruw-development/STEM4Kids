@@ -36,7 +36,7 @@ export default {
 #span {
     display: block;
     height: 56px;
-    width: 100vw;
+    width: 50vw;
     margin-bottom: 30px;
 }
 
@@ -90,7 +90,12 @@ export default {
 }
 
 #logo {
-    color: rgb(255, 136, 0);
+    background-image: url("../../assets/images/general/logo.png");
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    padding: 7px;
+    color: rgba(255, 136, 0, 0);
+    font-size: 1em;
     margin-right: 10px;
     cursor:default;
 }

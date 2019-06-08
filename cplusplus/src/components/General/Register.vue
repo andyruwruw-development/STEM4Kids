@@ -6,8 +6,8 @@
         <input v-bind:class="{filled: name != ''}" v-model="name" type="text" placeholder="Full Name"/><p/>
         <input v-bind:class="{filled: username != ''}" v-model="username" type="text" placeholder="Username"/><p/>
         <input v-bind:class="{filled: password != ''}" v-model="password" type="password" placeholder="Ask the Teacher"/><p/>
-        <button>I Have an Account</button>
-        <button>I'm Ready!</button>
+        <button @click="loginInstead">I Have an Account</button>
+        <button @click="register">I'm Ready!</button>
     </div>
   </div>
 </template>
@@ -24,8 +24,13 @@ export default {
       }
   },
   methods: {
-      login() {
-          
+      async register() {
+        await this.$store.dispatch("registerChild", {name: this.name, username: this.username, password: this.password});
+        console.log("Sending to New Location");
+        this.$router.push("/");
+      },
+      loginInstead() {
+          this.$store.dispatch("switchToggle", {value: true});
       }
   }
 }
@@ -90,7 +95,8 @@ button {
 }
 
 button:hover {
-    background-color:rgba(179, 179, 179, 0.397);
+    background-color: rgba(243, 243, 243, 0.164);
+    color: orange;
     animation: wiggle .3s ease;
 }
 

@@ -37,7 +37,6 @@ export default {
     max-width: 1300px;
 
     height: calc(100vh - 150px);
-    background-color: red;
     margin: 0 auto;
     overflow: hidden;
 }
@@ -47,7 +46,6 @@ export default {
     display: block;
     height: 100%;
     min-width: 375px;
-    background-color: purple;
     overflow: auto;
 }
 
@@ -58,7 +56,7 @@ export default {
     height: 100%;
     min-width: 375px;
     max-width: 375px;
-    background-color: blue;
+
 }
 
 .flex {

@@ -1,8 +1,10 @@
 <template>
   <div class="login">
     <Header v-bind:path="path"/>
-    <Login id="Login" v-if="loginreg == 0"/>
-    <Register id="Register" v-if="loginreg == 1"/>
+    <transition name="slide">
+      <Login id="Login" v-if="toggle == true"/>
+      <Register id="Register" v-if="toggle == false"/>
+    </transition>
   </div>
 </template>
 
@@ -27,10 +29,12 @@ export default {
     }
   },
   computed: {
-      
+    toggle() {
+      return this.$store.state.switch;
+    }
   },
   created() {
-    
+    this.$store.dispatch("switchToggle", {value: true});
   }
 }
 </script>
@@ -42,5 +46,17 @@ export default {
 
 #Register {
   margin-top: 5%;
+}
+
+.slide-enter-active {
+  transition: all .5s ease .2s;
+}
+
+.slide-leave-active {
+  transition: all .2s ease;
+}
+.slide-enter, .slide-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(-50px);
 }
 </style>

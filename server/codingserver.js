@@ -21,8 +21,8 @@ app.use(cookieParser());
     const users = require("./users.js");
     app.use("/api/users", users.routes);
 
-    //const parents = require("./parents.js");
-    //app.use("/api/parents", parents.routes);
+    const parents = require("./parents.js");
+    app.use("/api/parents", parents.routes);
 
     const admins = require("./admins.js");
     app.use("/api/admins", admins.routes);
@@ -41,7 +41,7 @@ app.use(cookieParser());
     const profile = require("./profile.js");
     app.use("/api/profile", profile.routes);
 
-    const progress = require("./progress.js");
-    app.use("/api/progress", progress.routes);
+    const report = require("./report.js");
+    app.use("/api/report", report.routes);
 
 app.listen(3003, () => console.log('Server listening on port 3003!'));

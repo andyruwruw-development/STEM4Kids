@@ -7,6 +7,10 @@
 <style>
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 
+body {
+  background-color: #f5f5f5;
+}
+
 #app {
   font-family:'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
