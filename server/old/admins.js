@@ -9,7 +9,9 @@ const SALT_WORK_FACTOR = 10;
 const adminSchema = new mongoose.Schema({
   username: String,
   password: String,
+  email: String,
   name: String,
+  clearance: Number,
   tokens: [],
 });
 
@@ -97,12 +99,14 @@ router.post('/', async (req, res) => {
       return res.status(403).send({
         message: "That username already exists."
       });
-
+    console.log("HELSFJK:");
     // create new user
     const admin = new Admin({
       username: req.body.username,
       password: req.body.password,
-      name: req.body.name
+      name: req.body.name,
+      email: req.body.email,
+      clearance: 3,
     });
     await admin.save();
     login(admin, res);

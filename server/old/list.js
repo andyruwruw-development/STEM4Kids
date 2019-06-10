@@ -71,6 +71,25 @@ progress [
 ]
 */ 
 
+router.post("/newsubject/:subject", auth.verifyToken, Admin.verify, async (req, res) => {
+  const list = new List({
+      subject: "C++ Lessons",
+      list: [
+        {
+          topicIndex: 0,
+          title: ""
+        }
+      ],
+  });
+  try {
+    await list.save();
+    return res.send(list);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
 // Posts new subject materials, verifies admin privlages.
 router.post("/newsubject/:subject", auth.verifyToken, Admin.verify, async (req, res) => {
     const list = new List({

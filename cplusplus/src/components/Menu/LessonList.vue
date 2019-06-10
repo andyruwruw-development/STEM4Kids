@@ -35,6 +35,7 @@
           </div>
           
         </div>
+        <transition name="slide">
         <div class="lessons-div" v-if="openComputed[subtopic.index]">
           <div @click="route(subject, subtopic.index, item.index, item.type)" class="lesson" v-for="item in subtopic.items" v-bind:key="item.index">
             {{subtopic.index}}.{{item.index}} {{item.title}}
@@ -55,6 +56,7 @@
             </div>
           </div>
         </div>
+        </transition>
       </div>
     </div>
   </div>
@@ -66,7 +68,7 @@ export default {
   name: 'lessonlist',
   data() {
     return {
-      subject: "CPlusPlus",
+      subject: "C++",
       open: [],
       test: [false],
       changed: false,
@@ -91,7 +93,7 @@ export default {
         {
           index: 1,
           title: "Introduction to C++",
-
+  
           quizcompleted: 5,
           quizfull: 10,
           challengecompleted: 5,
@@ -186,6 +188,18 @@ list
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.slide-enter-active {
+  transition: all .2s ease 0s;
+}
+
+.slide-leave-active {
+  transition: all .2s ease;
+}
+.slide-enter, .slide-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
 #list {
     display: block;
     width: 100%;
@@ -219,6 +233,7 @@ list
   border-radius: 10px;
   height: 30px;
   cursor: pointer;
+  transition: transform 1s;
 }
 
 .lesson {
