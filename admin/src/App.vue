@@ -8,8 +8,13 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 
 body {
-  background-color: #f5f5f5;
+  background-color: rgb(42, 44, 46);
+  background-size: 100vw 100vh;
+  background-position: 0px 0px;
+  overflow:hidden;
 }
+
+
 
 #app {
   font-family:'Roboto', sans-serif;
@@ -17,6 +22,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  display: block;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100vw;
+  
 }
 
 #nav {

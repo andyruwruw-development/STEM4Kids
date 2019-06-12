@@ -4,12 +4,10 @@
     <div id="header-div">
         <div class="flex-left">
             <div id="logo">STEM4Kids</div>
-            <div @click="clickedLink(item.index)" class="item" v-for="item in path" v-bind:key="item.title">
-                <p class="item-title">{{item.title}}</p>
-                <p v-if="!item.current">></p>
-            </div>
         </div>
         <div class="flex-right">
+            <div id="location"><div id="location-image"></div><p>Cupertino</p></div>
+            <div id="user"><div id="user-image"></div><p>Andrew Young</p></div>
         </div>
     </div>
   </div>
@@ -24,7 +22,7 @@ export default {
   },
   methods: {
       clickedLink(index) {
-          this.$router.push(this.path[index].path);
+          this.$router.go(-1 * this.path[index].back);
       }
   }
 
@@ -33,28 +31,56 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+#user, #location {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    transition: all .3s ease;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0);
+    margin-right: 10px;
+}
+
+#user:hover, #location:hover {
+    border: 1px solid rgb(204, 204, 204);
+    background-color: rgba(197, 188, 188, 0.151);
+    transform: scale(1.03, 1.03);
+}
+
+.fade {
+    animation: fade 1s ease;
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 #span {
     display: block;
-    height: 56px;
+    height: 45px;
     width: 50vw;
-    margin-bottom: 30px;
 }
 
 #header-div {
     display: flex;
     width: calc(100vw);
-    height: 56px;
+    height: 45px;
 
     position: fixed;
     top: 0;
     left: 0;
-    box-shadow: 0 0 10px rgba(0,0,0,.54);
+    
 
     justify-content: space-between;
-    min-height: 56px;
+    min-height: 45px;
     align-items: center;
 
-    background-color: #fff;
+    background-color: rgb(32, 34, 37);
 
     z-index: 5010;
 
@@ -77,9 +103,9 @@ export default {
 
 .flex-right {
     display: flex;
-    justify-content: left;
     height: 100%;
     width: 30%;
+    justify-content: flex-end;
 
     margin-right: 12px;
 
@@ -89,13 +115,16 @@ export default {
     align-items: center;
 }
 
+@import url('https://fonts.googleapis.com/css?family=Patua+One&display=swap');
+
 #logo {
-    background-image: url("../../assets/images/general/logo.png");
     background-size: auto 100%;
     background-repeat: no-repeat;
     padding: 7px;
-    color: rgba(255, 136, 0, 0);
-    font-size: 1em;
+    color: rgb(197, 188, 188);
+    font-family: 'Patua One', cursive;
+    font-weight: bolder;
+    font-size: 1.5em;
     margin-right: 10px;
     cursor:default;
 }
@@ -112,6 +141,27 @@ export default {
 p {
     margin: 0px 3px;
     cursor:default;
+    color: #a6a7a8;
+}
+
+#user-image {
+    display: block;
+    width: 20px;
+    height: 20px;
+    background-size: 100% 100%;
+    filter: invert(100%);
+    margin-right: 5px;
+    background-image: url("../../assets/images/general/user.png");
+}
+
+#location-image {
+    display: block;
+    width: 20px;
+    height: 20px;
+    background-size: 100% 100%;
+    filter: invert(100%);
+    margin-right: 5px;
+    background-image: url("../../assets/images/general/location.png");
 }
 
 </style>
