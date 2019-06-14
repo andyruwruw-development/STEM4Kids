@@ -1,25 +1,30 @@
 <template>
   <div class="material">
     <div id="material-div">
-        <List id="list"/>
+        <SubjectMenu v-if="subject == null" id="list"/>
+        <List v-if="subject != null" id="list"/>
         <div id="main">
-            <EditItem />
-            <ViewItem />
+            <ItemEdit />
+            <ItemView />
         </div>
     </div>
   </div>
 </template>
 
 <script>
+import SubjectMenu from '@/components/Material/SubjectMenu.vue'
 import List from '@/components/Material/List.vue'
-import EditItem from '@/components/Material/EditItem.vue'
-import ViewItem from '@/components/Material/ViewItem.vue'
+import ItemEdit from '@/components/Material/ItemEdit.vue'
+import ItemView from '@/components/Material/ItemView.vue'
 
 // { title: STRING, index: Number, path: String, current: Boolean}
 export default {
   name: 'material',
   components: {
-      List
+      List,
+      ItemEdit,
+      ItemView,
+      SubjectMenu,
   },
   props: {
 
@@ -31,8 +36,13 @@ export default {
   },
   methods: {
 
+  },
+  computed: {
+    subject() {
+        return "";
+        return this.$store.state.subject;
+    }
   }
-
 }
 </script>
 
@@ -44,7 +54,8 @@ export default {
 
 #list {
     overflow: auto;
-    width: 250px;
+    width: 18vw;
+    min-width: 250px;
     min-height: calc(100vh - 45px);
 }
 
