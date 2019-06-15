@@ -29,7 +29,6 @@ const itemSchema = new mongoose.Schema({
     },
 });
 
-// Initializing Lesson Variable.
 const Item = mongoose.model('Item', itemSchema);
 
 // Posts new lessons, verifies admin privlages.

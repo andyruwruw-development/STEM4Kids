@@ -3,6 +3,7 @@
 This is a rundown of everything I know about writing RESTful APIs.
 
 ## Table of Contents
+1. <a href="#pre">Preface:</a> JavaScript Syntax
 1. <a href="#part1">Part 1:</a> What is an Express Server Middleware
 2. <a href="#part2">Part 2:</a> Request Routing - Finding the Right Function
    1. <a href="#part2-part1">Method 1:</a> Request Type
@@ -13,6 +14,18 @@ This is a rundown of everything I know about writing RESTful APIs.
    2. <a href="#part3-part2">Section 2:</a> The Router
    3. <a href="#part3-part3">Section 3:</a> Server Files
    4. <a href="#part3-part4">Section 4:</a> Mongoose Schemas and Objects
+   5. <a href="#part3-part5">Section 5:</a> Server Functions
+
+<h1 id="pre">Preface: Javascript Syntax</h1>
+
+```
+Declaring Variables 
+(No distinction as to the type of variable you wish to create)
+
+var foo = "Soup";
+let bar = 12;
+const baz = [1, 2, 3];
+```
 
 <h1 id="part1">Part 1: What is an Express Server Middleware</h1>
 
@@ -221,4 +234,107 @@ We'll have to decide what kind of data to store, all of that is just nonsense. B
 Our statement below creating our *schema* is where we finally define the Object, which will be used throughout our code.
 
 `Example` and `exampleSchema` are exchanged depending on what the Item is.
+
+<h2 id="part3-part5">Section 5: Server Functions</h2>
+
+Finally getting around to talk about the `CODING`.
+
+First thing we gotta do is create the basic function with the correct path and type.
+
+Let's go back to the first example with the path -
+```
+GET /api/locations/cupertino
+```
+
+Note that express will lead the request to our `locations.js` file and remove irrelevent parts of the path, making it now just -
+```
+GET /cupertino
+```
+
+Between declaring the `mongoose object` and `module.exports` start the following -
+```
+router.get("/cupertino", async (req, res) => {
+
+});
+```
+The first line `get` is where we designate the type of reqests lead to this function. It can be changed with `post`, `put`, and `delete`.
+
+In cases where the path is simply
+```
+GET /api/locations
+```
+You can create the previous function as such -
+```
+router.get("/", async (req, res) => {
+
+});
+```
+
+More to note, `async (req, res) => { }` is syntax for JavaScript to run the function between the brackets with `req(request)` and `res(response)` as parameters.
+
+An `async` function is a long subject. All I usually take away from it is it's (<-- that was cool) enabling of you to use `await`. To be discussed in a few paragraphs.
+
+Say we wanted to find an item from within the *Mongo Database* called `Item`.
+
+First step is wrapping that function in a `try` and `catch` statement, which will *catch* any errors thrown and send them back to the client.
+
+```
+router.get("/", async (req, res) => {
+    try {
+
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(500);
+    }
+});
+```
+The purpose of `console.log` is simply debugging. It's JavaScripts `print` or `cout` or `System.out.println()` ( <<< last one is gross).
+
+Within the `try` statement we're going to find our item, and then send it back in the `response`.
+
+There's two ways to find things in Mongoose: `find` and `findOne`. 
+
+*Find* will return and `array` of results with the given parameters. 
+
+I wrote "Find one will find one" but that's redundant. It returns one object.
+
+```
+router.get("/", async (req, res) => {
+    try {
+      let item = await Item.findOne({
+        subject: req.body.subject,
+      });
+      return res.send(item);
+    } catch (error) {
+      console.log(error);
+      return res.sendStatus(500);
+    }
+});
+```
+We create a new variable to hold the data called `item`, and then use `await` (I'll explain it right after this I promise).
+
+We then specify what TYPE of object we want to find with our `Item` object we declared with the *mongoose schema*. 
+
+`findOne` is opened up and we set the parameters as to what Item we want to find.
+
+Mongoose will search the database in our `Item` collection, looking for an Item that matches the parameters we want.
+
+
+
+
+```
+router.get("/view/:subject/:topicIndex/:type/:index", async (req, res) => {
+    try {
+      let item = await Item.findOne({
+        _id: req.params.subject,
+      });
+      item.data += 1;
+      return res.send(item);
+    } catch (error) {
+      console.log(error);
+      return res.sendStatus(500);
+    }
+});
+```
+With web programming, you have to account for the fact that some things take a while to load.
 
