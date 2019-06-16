@@ -4,16 +4,19 @@ This is a rundown of everything I know about writing RESTful APIs.
 
 Feel free to text me any questions. I'm not that great at explaining concepts and hope that this at least serves as a reference.
 
+Don't forget to [Install MongoDB](#installmongo) first.
+
 Happy coding.
 
 ## Table of Contents
+
 1. <a href="#pre">Preface:</a> JavaScript Syntax
-1. <a href="#part1">Part 1:</a> What is an Express Server Middleware
-2. <a href="#part2">Part 2:</a> Request Routing - Finding the Right Function
+2. <a href="#part1">Part 1:</a> What is an Express Server Middleware
+3. <a href="#part2">Part 2:</a> Request Routing - Finding the Right Function
    1. <a href="#part2-part1">Method 1:</a> Request Type
    2. <a href="#part2-part2">Method 2:</a> Request Path
    3. <a href="#part2-part3">Method 3:</a> Routing to Multiple Files
-3. <a href="#part3">Part 3:</a> Creating the Server
+4. <a href="#part3">Part 3:</a> Creating the Server
    1. <a href="#part3-part1">Section 1:</a> Installation of Packages
    2. <a href="#part3-part2">Section 2:</a> The Router
    3. <a href="#part3-part3">Section 3:</a> Server Files
@@ -21,14 +24,77 @@ Happy coding.
    5. <a href="#part3-part5">Section 5:</a> Server Functions
    6. <a href="#part3-part6">Section 6:</a> Stuff Mongoose Can Do
    7. <a href="#part3-part7">Section 7:</a> POST Functions
-4. <a href="#part4">Part 4:</a> Tips and Tricks
+5. <a href="#part4">Part 4:</a> Tips and Tricks
    1. <a href="#part4-part1">Tip 1:</a> Path Parameters
    2. <a href="#part4-part2">Tip 2:</a> Logging Created Times
    3. <a href="#part4-part3">Tip 3:</a> User File
    4. <a href="#part4-part4">Tip 4:</a> Proper Permissions
    5. <a href="#part4-part5">Tip 5:</a> User Data
    6. <a href="#part4-part6">Tip 6:</a> Helping Functions
-   7. <a href="#part4-part7">Tip 7:</a> Using `_id`
+   7. <a href="#part4-part7">Tip 7:</a> Using `_id` for Cool Stuff
+
+<h1 id="installmongo">MongoDB Installation</h1>
+
+Before we get started on anything you'll need to start a Mongo Database server on your computer!
+
+If you plan on working on multiple computers I would do this on both.
+
+There is [installation documentation](https://docs.mongodb.com/manual/installation/) on the Mongo website but below summarizes the steps on each OS.
+
+## Installing on MacOS
+
+First, tap the official MongoDb repositiory.
+
+```
+brew tap mongodb/brew
+```
+If your mac isn't letting you use brew, you can install [Homebrew](https://brew.sh/) again.
+
+After that is done, install Mongo.
+```
+brew install mongodb-community@4.0
+```
+
+To run from the command line in the foreground:
+```
+mongod --config /usr/local/etc/mongod.conf
+```
+To run as a service:
+```
+brew services start mongodb-community@4.0
+```
+## Installing on Windows
+
+First, [download the Windows 64-bit](https://www.mongodb.com/download-center/community?jmp=docs), MSI installation for the current version.
+
+Next, double-click the MSI file you downloaded. You can install with the defaults. Install MongoDB Compass for a GUI for the database.
+
+## R u a hardcore coder with Linux?
+To install MongoDB:
+```
+sudo apt update
+sudo apt install mongodb
+```
+Mongo will run on port `27017` by default.
+
+Check if it's chuggin:
+```
+sudo systemctl status mongodb
+```
+Stop it:
+```
+sudo systemctl stop mongodb
+```
+To start or restart Mongo:
+```
+sudo systemctl start mongodb
+sudo systemctl restart mongodb
+```
+By default Mongo is setup to run automatically to disable/enable this behavior:
+```
+sudo systemctl disable mongodb
+sudo systemctl enable mongodb
+```
 
 <h1 id="pre">Preface: Javascript Syntax</h1>
 
@@ -781,7 +847,9 @@ Back when I coded chess, I kept all the chess logic in my server. Ensuring no on
 
 Syntax for functions is at [JavaScript Syntax](pre).
 
-<h2 id="part4-part7">Tip 7: Using `_id`</h2>
+<h2 id="part4-part7">Tip 7: Using `_id` for Cool Stuff</h2>
+
+It's not that interesting actually.
 
 Every item in your Mongoose server is saved with a `_id` regardless if you add it to the `schema`. These `_id` can be manually set in the `POST` function, and can be useful to finding items by a unique id.
 
