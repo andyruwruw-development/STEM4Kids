@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: 
   {
     admin: null,
+    profile: null,
 
     locations: [],
     location: "all",
@@ -19,11 +20,20 @@ export default new Vuex.Store({
     item: null,
 
     staff: null,
-    
+    staffprofile: null,
+
+    reports: null,
+    report: null,
+
+    students: null,
+    student: null,
   },
   mutations: {
     setAdmin(state, admin) {
       state.admin = admin;
+    },
+    setProfile(state, profile) {
+      state.profile = profile;
     },
     setLocations(state, locations) {
       state.locations = locations;
@@ -45,6 +55,21 @@ export default new Vuex.Store({
     },
     setStaff(state, staff) {
       state.staff = staff;
+    },
+    setStaffProfile(state, staffprofile) {
+      state.staffprofile = staffprofile;
+    },
+    setReports(state, reports) {
+      state.reports = reports;
+    },
+    setReport(state, report) {
+      state.report = report;
+    },
+    setStudents(state, students) {
+      state.students = students;
+    },
+    setStudent(state, student) {
+      state.student = student;
     }
   },
   actions: {

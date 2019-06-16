@@ -20,6 +20,8 @@ This is a rundown of everything I know about writing RESTful APIs.
 4. <a href="#part4">Part 4:</a> Tips and Tricks
    1. <a href="#part4-part1">Tip 1:</a> Path Parameters
    2. <a href="#part4-part2">Tip 2:</a> Logging Created Times
+   3. <a href="#part4-part3">Tip 3:</a> User File
+   4. <a href="#part4-part4">Tip 4:</a> Proper Permissions
 
 <h1 id="pre">Preface: Javascript Syntax</h1>
 
@@ -486,7 +488,7 @@ I usually send the new item to the client as well for immediate display.
 <h1 id="part4">Part 4: Tips and Tricks</h1>
 
 
-<h2 id="part4-part1">Section 1: Path Parameters</h2>
+<h2 id="part4-part1">Tip 1: Path Parameters</h2>
 
 ```
 router.get("/:location/:username", async (req, res) => {
@@ -514,7 +516,7 @@ GET /api/location/cupertino/andrew
 ```
 The first two variables would be removed by Express, and `req.params.location` would have the value **"cupertino"**, and `req.params.location` would have **"andrew"**.
 
-<h2 id="part4-part2">Section 2: Logging Created Times</h2>
+<h2 id="part4-part2">Tip 2: Logging Created Times</h2>
 
 ```
 const itemSchema = new mongoose.Schema({
@@ -565,7 +567,7 @@ router.get("/", async (req, res) => {
 
 The `sort({created: -1})` will arrange the array of items in reverse order.
 
-<h2 id="part4-part2">Section 2: User File</h2>
+<h2 id="part4-part3">Tip 3: User File</h2>
 
 So I took the class on web design this last fall, and we learned all about salting and hashing passwords to have consistant, irreversable passwords hashed and not stored in plain text.
 
@@ -584,4 +586,18 @@ If you want to read into it and figure it out go ahead!
 But go ahead and copy the file into the server.
 
 They all require the file [auth.js](./auth.js) which verfies tokens.
+
+Files with links to `auth.js` at the top need to be in same directory as the file.
+
+<h2 id="part4-part4">Tip 4: Proper Permissions</h2>
+
+Say we have a function that allows admins to add new admins.
+
+In order to ensure 
+
+
+
+
+
+
 
