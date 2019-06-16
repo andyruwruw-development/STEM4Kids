@@ -2,6 +2,10 @@
 
 This is a rundown of everything I know about writing RESTful APIs.
 
+Feel free to text me any questions. I'm not that great at explaining concepts and hope that this at least serves as a reference.
+
+Happy coding.
+
 ## Table of Contents
 1. <a href="#pre">Preface:</a> JavaScript Syntax
 1. <a href="#part1">Part 1:</a> What is an Express Server Middleware
@@ -22,6 +26,9 @@ This is a rundown of everything I know about writing RESTful APIs.
    2. <a href="#part4-part2">Tip 2:</a> Logging Created Times
    3. <a href="#part4-part3">Tip 3:</a> User File
    4. <a href="#part4-part4">Tip 4:</a> Proper Permissions
+   5. <a href="#part4-part5">Tip 5:</a> User Data
+   6. <a href="#part4-part6">Tip 6:</a> Helping Functions
+   7. <a href="#part4-part7">Tip 7:</a> Using `_id`
 
 <h1 id="pre">Preface: Javascript Syntax</h1>
 
@@ -32,6 +39,16 @@ Declaring Variables
 var foo = "Soup";
 let bar = 12;
 const baz = [1, 2, 3];
+```
+
+```
+Creating Functions 
+
+function foo(bar) {
+  let baz = bar * 100;
+  baz += "%";           // Changes it to a string.
+  return baz;
+}
 ```
 
 <h1 id="part1">Part 1: What is an Express Server Middleware</h1>
@@ -458,19 +475,25 @@ Returns Sorted Array of Objects
 
 <h2 id="part3-part7">Section 7: POST Functions</h2>
 
-POST functions create new items and are a bit different.
+`POST` functions create new items and are a bit different.
 
+Say we have the schema:
 ```
-router.post("/", auth.verifyToken, User.verify, async (req, res) => {
+const itemSchema = new mongoose.Schema({
+    title: String
+  });
+  
+  const Item = mongoose.model('Item', itemSchema);
+```
+You would right a `POST function` as follows with the right path.
+```
+router.post("/", async (req, res) => {
     const item = new Item({
-      user: req.user,
-
       title: req.body.title,
-      description: req.body.description,
     });
     try {
       await item.save();
-      return res.send(item);
+      return res.send(items);
     } catch (error) {
       console.log(error);
       return res.sendStatus(500);
@@ -593,11 +616,185 @@ Files with links to `auth.js` at the top need to be in same directory as the fil
 
 Say we have a function that allows admins to add new admins.
 
-In order to ensure 
+In order to ensure only admins have access to that function, we can add verfication.
 
+At the top of the file under `const router = express.Router();` add the following link to our `auth.js` file.
 
+```
+const mongoose = require('mongoose');
+const express = require("express");
+const router = express.Router();
+const auth = require("./auth.js");
+```
 
+This brings us to something I mentioned I would talk about earlier.
+```
+module.exports = {
+    model: Item,
+    routes: router,
+}
+```
+At the bottom of each of your files you should have an export that leads back to the router.
 
+When we created schemas, we initialized a template object called `Item`. Every file will have a different schema and template object. You can add the template object to `model: Item,` to export it and allow other files to import it for their own use.
 
+So always ensure that the object you're dealing with is getting exported at the bottom.
+
+So lets import that object into the file we just added `const auth = require("./auth.js");` to. Add the following to import the `User` object from `user.js`. Add it right below where we imported `auth.js`.
+
+```
+const mongoose = require('mongoose');
+const express = require("express");
+const router = express.Router();
+const auth = require("./auth.js");
+
+const users = require("./users.js");
+const User = users.model;
+```
+
+The user object is now available for us to use to verify login information, and protect functions from running without proper authentication.
+
+To do this we add the following to our functions that require login to access.
+```
+router.get("/", auth.verifyToken, User.verify, async (req, res) => {
+    try {
+
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(500);
+    }
+});
+```
+`auth.verifyToken` is a method within `auth.js` which will check for stored cookies with proper login information.
+
+`User.verify` will validate a user account by looking it up in our database.
+
+The same can be done with `parents.js` and `admins.js`.
+```
+const parents = require("./parents.js");
+const Parent = parents.model;
+
+router.get("/", auth.verifyToken, Parent.verify, async (req, res) => {
+```
+```
+const admins = require("./admins.js");
+const Admin = admins.model;
+
+router.get("/", auth.verifyToken, Admin.verify, async (req, res) => {
+```
+<h2 id="part4-part5">Tip 5: User Data</h2>
+
+Students will all have their own profiles, which requires us to bind their unique `User` object to a new `StudentProfile` object.
+
+To start, don't forget to import `auth.js` and the `User` objects.
+```
+const auth = require("./auth.js");
+
+const users = require("./users.js");
+const User = users.model;
+```
+
+Next, for the schema of a profile, we can tell mongoose that one of data pieces will be a `User` object with the following syntax.
+
+```
+const itemSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+    },
+
+    // Other Data
+
+  });
+  
+  const Item = mongoose.model('Item', itemSchema);
+```
+When we use a `POST` function to create a new item, usually you go through the following:
+```
+router.post("/", async (req, res) => {
+    const item = new Item({
+      title: req.body.title,
+    });
+    try {
+      await item.save();
+      return res.send(items);
+    } catch (error) {
+      console.log(error);
+      return res.sendStatus(500);
+    }
+  });
+```
+Using `req.body.var_name ` to access `request` data.
+
+However when sent a `request`, the `User` information will be available in `req.user` as opposed to `req.body`. So you can simply write a `POST` function with a user's `User` object as a piece of data as follows:
+```
+router.post("/", auth.verifyToken, User.verify, async (req, res) => {
+    const item = new Item({
+      user: req.user,
+      title: req.body.title,
+    });
+    try {
+      await item.save();
+      return res.send(item);
+    } catch (error) {
+      console.log(error);
+      return res.sendStatus(500);
+    }
+  });
+```
+Same goes for `Admin` and `Parent`.
+```
+admin: req.user
+```
+```
+parent: req.user
+```
+I'll be using the variable name `user` for all three, it's up to the server to have the `User` for kids, `Parent` for parents, and `Admin` for admins. The only place you should have to use `user` universally is accessing `req.user`.
+
+Additionally, each Parent will have a profile with their kids as data pieces.
+
+Here you can get away with just an empty array:
+```
+const itemSchema = new mongoose.Schema({
+    parent: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+    },
+
+    kids: [] 
+    // OR 
+    // kids: Array
+
+  });
+  
+  const Item = mongoose.model('Item', itemSchema);
+```
+And then just have a function for adding kids.
+
+Honestly that one is going to be tricky and I'm still planning it out in my head, we can talk throught it together!
+
+<h2 id="part4-part6">Tip 6: Helping Functions</h2>
+
+Feel free to add more functions to clean up the code!
+
+Back when I coded chess, I kept all the chess logic in my server. Ensuring no one could cheat by changing their own source code.
+
+Syntax for functions is at [JavaScript Syntax](pre).
+
+<h2 id="part4-part7">Tip 7: Using `_id`</h2>
+
+Every item in your Mongoose server is saved with a `_id` regardless if you add it to the `schema`. These `_id` can be manually set in the `POST` function, and can be useful to finding items by a unique id.
+
+---
+---
+---
+---
+## HUZZAH! YOU NOW KNOW EVERYTHING I KNOW.
+Feel free to ask questions.
+
+---
+---
+---
+---
 
 
