@@ -32,6 +32,7 @@ Happy coding.
    5. <a href="#part4-part5">Tip 5:</a> User Data
    6. <a href="#part4-part6">Tip 6:</a> Helping Functions
    7. <a href="#part4-part7">Tip 7:</a> Using `_id` for Cool Stuff
+6. <a href="#part5">Part 5:</a> Running the Server
 
 <h1 id="installmongo">MongoDB Installation</h1>
 
@@ -852,6 +853,26 @@ Syntax for functions is at [JavaScript Syntax](pre).
 It's not that interesting actually.
 
 Every item in your Mongoose server is saved with a `_id` regardless if you add it to the `schema`. These `_id` can be manually set in the `POST` function, and can be useful to finding items by a unique id.
+
+<h1 id="part5">Part 5: Running the Server</h1>
+
+Alright time to test out the server.
+
+Hopefully we're working together and the front-end has a way to show if everything's working.
+
+Use command line to start up the website. Within command line, go to the folder of the website we're trying out and run:
+```
+npm run serve
+```
+Open a new command line window and go to your server file.
+
+Then run the following with the name of your router file:
+```
+node router_file_name.js
+```
+Any `console.log()` statements you've entered for debugging purposes should appear on the second command line window where you ran the server.
+
+When we're finally done with everything, we'll be using something called `forever` to run the server, which will take care of running it without us having to have command line open.
 
 ---
 ---
