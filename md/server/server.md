@@ -15,6 +15,11 @@ This is a rundown of everything I know about writing RESTful APIs.
    3. <a href="#part3-part3">Section 3:</a> Server Files
    4. <a href="#part3-part4">Section 4:</a> Mongoose Schemas and Objects
    5. <a href="#part3-part5">Section 5:</a> Server Functions
+   6. <a href="#part3-part6">Section 6:</a> Stuff Mongoose Can Do
+   7. <a href="#part3-part7">Section 7:</a> POST Functions
+4. <a href="#part4">Part 4:</a> Tips and Tricks
+   1. <a href="#part4-part1">Tip 1:</a> Path Parameters
+   2. <a href="#part4-part2">Tip 2:</a> Logging Created Times
 
 <h1 id="pre">Preface: Javascript Syntax</h1>
 
@@ -130,6 +135,8 @@ npm install express mongoose bcrypt jsonwebtoken cookie-parser
 
 <h2 id="part3-part2">Section 2: The Router</h2>
 
+[Example Router](https://github.com/andyruwruw/To-Do-Personal/blob/master/server/todoserver.js)
+
 We can then create our first file, the router.
 
 To start we need to import the packages we want to use.
@@ -181,6 +188,8 @@ app.use("/api/example", example.routes);
 Change out `example` with the name and topic of each file. This will be used by Express to correctly route each request to it's desired file.
 
 <h2 id="part3-part3">Section 3: Server Files</h2>
+
+[Example Server File](https://github.com/andyruwruw/To-Do-Personal/blob/master/server/item.js)
 
 Server files you create need a few things to work properly.
 
@@ -263,16 +272,17 @@ In cases where the path is simply
 ```
 GET /api/locations
 ```
-You can create the previous function as such -
+You can create the previous function as -
 ```
 router.get("/", async (req, res) => {
 
 });
 ```
+because the first two items are removed by the router.
 
 More to note, `async (req, res) => { }` is syntax for JavaScript to run the function between the brackets with `req(request)` and `res(response)` as parameters.
 
-An `async` function is a long subject. All I usually take away from it is it's (<-- that was cool) enabling of you to use `await`. To be discussed in a few paragraphs.
+An `async` function is a long subject. All I usually take away from it is it's (<-- it its is it isn't is it) enabling of you to use `await`. I'll talk about that in a little bit.
 
 Say we wanted to find an item from within the *Mongo Database* called `Item`.
 
@@ -290,11 +300,16 @@ router.get("/", async (req, res) => {
 ```
 The purpose of `console.log` is simply debugging. It's JavaScripts `print` or `cout` or `System.out.println()` ( <<< last one is gross).
 
+
+
+
+
+
 Within the `try` statement we're going to find our item, and then send it back in the `response`.
 
 There's two ways to find things in Mongoose: `find` and `findOne`. 
 
-*Find* will return and `array` of results with the given parameters. 
+*Find* will return and `array` of results that match a set of given parameters. 
 
 I wrote "Find one will find one" but that's redundant. It returns one object.
 
@@ -302,7 +317,7 @@ I wrote "Find one will find one" but that's redundant. It returns one object.
 router.get("/", async (req, res) => {
     try {
       let item = await Item.findOne({
-        subject: req.body.subject,
+        subject: "quetzal",
       });
       return res.send(item);
     } catch (error) {
@@ -317,18 +332,19 @@ We then specify what TYPE of object we want to find with our `Item` object we de
 
 `findOne` is opened up and we set the parameters as to what Item we want to find.
 
-Mongoose will search the database in our `Item` collection, looking for an Item that matches the parameters we want.
+In this case, it will find an item with `subject` of *"quetzal"* and return it.
 
-
-
+Now say we want to do something with `item` after we load it.
 
 ```
-router.get("/view/:subject/:topicIndex/:type/:index", async (req, res) => {
+router.get("/", async (req, res) => {
     try {
       let item = await Item.findOne({
-        _id: req.params.subject,
+        subject: "quetzal",
       });
+
       item.data += 1;
+
       return res.send(item);
     } catch (error) {
       console.log(error);
@@ -337,4 +353,235 @@ router.get("/view/:subject/:topicIndex/:type/:index", async (req, res) => {
 });
 ```
 With web programming, you have to account for the fact that some things take a while to load.
+
+`await` within an `async` function is like a **pause** until the file has been found and loaded. For example, all of my server calls have to be `async` to allow the data to first to sent back from the server.
+
+The statement `return res.send(item);` will send item back to the client.
+
+When a request is made, a **payload** can be added to it, or an object with data.
+
+For example, I can ask for a lesson, and in the payload, specify the subject and index, which can be used to find it.
+
+Data sent in the payload can be accessed through -
+```
+req.body.var_name
+```
+So if my payload was -
+```
+{
+  subject: "Science",
+  index: 2,
+}
+```
+You could access the `subject` through `req.body.subject`.
+
+<h2 id="part3-part6">Section 6: Stuff Mongoose Can Do</h2>
+
+```
+Find One
+
+await Item.findOne({   // Nothing i
+  key: value,
+  key: value,
+});
+
+Returns Object
+```
+
+```
+Find Many
+
+await Item.find({             // Leaving find({}) empty will return all items.
+  key: value,
+  key: value,
+});
+
+Returns Array of Items
+```
+
+```
+Delete One
+
+await Item.deleteOne({
+  key: value,
+  key: value,
+});
+
+Returns Object with Confirmation
+```
+
+```
+Delete Many
+
+await Item.deleteMany({
+  key: value,
+  key: value,
+});
+
+Returns Object with Confirmation
+```
+
+```
+Change Data
+
+await Item.updateOne({
+  key: value,       // Finds Object based on These
+  key: value,
+},
+{
+  $set: {           // Changes this data. Optional
+    key: newValue,
+    key: newValue,
+  },
+  $push {           // Push data, Optional.
+    key: value,
+  },
+});
+
+Returns Object with Confirmation
+```
+
+```
+Find and Sort Array of Objects
+
+await Item.find({
+  key: value,       // Finds Object based on These
+  key: value,
+}).sort({
+  key: -1 OR 1 (ascending or descending)
+});
+
+Returns Sorted Array of Objects
+```
+
+<h2 id="part3-part7">Section 7: POST Functions</h2>
+
+POST functions create new items and are a bit different.
+
+```
+router.post("/", auth.verifyToken, User.verify, async (req, res) => {
+    const item = new Item({
+      user: req.user,
+
+      title: req.body.title,
+      description: req.body.description,
+    });
+    try {
+      await item.save();
+      return res.send(item);
+    } catch (error) {
+      console.log(error);
+      return res.sendStatus(500);
+    }
+  });
+```
+
+Create a new item using the syntax `const item = new Item` with the correct object name in place of `item` and `Item`.
+
+Within a try and catch, `await item.save()` is used to save the item to the database.
+
+I usually send the new item to the client as well for immediate display.
+
+
+<h1 id="part4">Part 4: Tips and Tricks</h1>
+
+
+<h2 id="part4-part1">Section 1: Path Parameters</h2>
+
+```
+router.get("/:location/:username", async (req, res) => {
+    try {
+      let item = await Item.findOne({
+        username: req.params.username,
+        location: req.params.location,
+      });
+
+      return res.send(item);
+    } catch (error) {
+      console.log(error);
+      return res.sendStatus(500);
+    }
+});
+```
+
+Notice the use of `/:location/:username` in the path for the function.
+
+These essentially become parameters accessable through `req.params.var_name`.
+
+Meaning, if I called the function by -
+```
+GET /api/location/cupertino/andrew
+```
+The first two variables would be removed by Express, and `req.params.location` would have the value **"cupertino"**, and `req.params.location` would have **"andrew"**.
+
+<h2 id="part4-part2">Section 2: Logging Created Times</h2>
+
+```
+const itemSchema = new mongoose.Schema({
+    title: String,
+
+    created: {
+      type: Date,
+      default: Date.now
+    },
+  });
+```
+
+Adding the following `created` to the bottom of your schema can be really useful.
+
+Within the *POST function*, you don't need to set `created`, it will automatically create a *Date Object* the moment it was created.
+
+```
+router.post("/", async (req, res) => {
+    const item = new Item({
+      title: req.body.title,
+    });
+    try {
+      await item.save();
+      return res.send(items);
+    } catch (error) {
+      console.log(error);
+      return res.sendStatus(500);
+    }
+  });
+```
+
+This allows you to send back arrays of items sorted in order of date created.
+
+```
+router.get("/", async (req, res) => {
+  try {
+    let items = await Item.find({
+    }).sort({
+      created: -1
+    });
+    return res.send(comments);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+  });
+```
+
+The `sort({created: -1})` will arrange the array of items in reverse order.
+
+<h2 id="part4-part2">Section 2: User File</h2>
+
+So I took the class on web design this last fall, and we learned all about salting and hashing passwords to have consistant, irreversable passwords hashed and not stored in plain text.
+
+Along with storing webtokens with user data so they don't have to login everytime with the same device.
+
+Honestly because the process is always the same, I used the same file and rarely make changes, and I'd suggest doing the same.
+
+If you want to read into it and figure it out go ahead!
+
+[Student (User) File](./users.js)
+
+[Admin (User) File](./admins.js)
+
+[Parent (User) File](./parents.js)
+
+But go ahead and copy the file into the server.
+
+They all require the file [auth.js](./auth.js) which verfies tokens.
 
