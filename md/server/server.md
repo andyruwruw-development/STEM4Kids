@@ -872,7 +872,31 @@ node router_file_name.js
 ```
 Any `console.log()` statements you've entered for debugging purposes should appear on the second command line window where you ran the server.
 
-When we're finally done with everything, we'll be using something called `forever` to run the server, which will take care of running it without us having to have command line open.
+When we're finally done with everything, we'll be using a node library called `forever` to run the server, which will take care of running it without us having to have command line open.
+
+```
+npm install forever -g
+```
+That should install it globally so it doesn't matter where you are.
+
+You can run the server now with:
+```
+forever start router_file_name.js
+```
+You can check its status with:
+``` 
+forever list
+```
+I've always found whenever I first run `forever` it gives a weird error message. Checking the list to see if it's `STOPPED` is the best way to see if it's actually running.
+
+Otherwise it will have a number as to how long it's been running, which mean's you're all good.
+
+To stop a server, you use it's index from `forever list`.
+```
+forever stop 0
+```
+
+
 
 ---
 ---
