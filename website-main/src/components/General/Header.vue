@@ -1,10 +1,10 @@
 <template>
-  <div class="header">
+  <div class="headercomp">
     <div class="flex" id="header-div">
 
       <div class="flex" id="logo-div">
         <img id="stem-logo" src="../../assets/stem-logo.png">
-        <h1 id="website-title">STEM 4 Kids</h1>
+        <h1 id="website-title">{{data.title}}</h1>
       </div>
 
       <div class="flex" id="menu-div">
@@ -40,9 +40,9 @@
 
 <script>
 export default {
-  name: 'header',
+  name: 'headercomp',
   props: {
-    msg: String
+    data: Object,
   }
 }
 </script>

@@ -1,16 +1,12 @@
 <template>
-  <div class="slider">
-    <div id="information">
-
-    </div>
-    <div id="image1"></div>
-    <div id="image2"></div>
+  <div class="paragraph">
+    
   </div>
 </template>
 
 <script>
 export default {
-  name: 'slider',
+  name: 'paragraph',
   props: {
     data: Object,
   }
@@ -21,7 +17,3 @@ export default {
 <style scoped>
 
 </style>
-
-
-
-
