@@ -41,8 +41,10 @@
 <script>
 export default {
   name: 'headercomp',
-  props: {
-    data: Object,
+  computed: {
+    data() {
+      return this.$store.state.data.header;
+    }
   }
 }
 </script>
