@@ -1,15 +1,17 @@
 <template>
   <div class="home">
-    <Header id="header" />
-    <div v-for="item in data.home" v-bind:key="item.index">
-      <Slider v-if="item.type == 'slider'" v-bind:data="item"/>
-      <Paragraph v-if="item.type == 'paragraph'" v-bind:data="item"/>
-      <MediaLinksList v-if="item.type == 'medialinkslist'" v-bind:data="item"/>
-      <CatagoryLinks v-if="item.type == 'catagorylinks'" v-bind:data="item"/>
-      <FeaturedLink v-if="item.type == 'featuredlink'" v-bind:data="item"/>
+    <div id="home-div">
+      <Header id="header" />
+      <div class="item-thing" v-for="item in home" v-bind:key="item.index">
+        <Slider v-if="item.type == 'slider'" />
+        <Paragraph v-if="item.type == 'paragraph'" v-bind:details="item"/>
+        <MediaLinksList v-if="item.type == 'medialinkslist'" />
+        <CatagoryLinks v-if="item.type == 'catagorylinks'"/>
+        <FeaturedLink v-if="item.type == 'featuredlink'" />
+      </div>
+      <Footer/>
+      
     </div>
-    <Footer/>
-    
   </div>
 </template>
 
@@ -37,19 +39,29 @@ export default {
     FeaturedLink
   },
   computed: {
-    data() {
-      return this.$store.state.data;
+    home() {
+      return [
+        {index: 0,type: "slider"},
+        {index: 1,type: "paragraph", title: "Hey there this is a title!", paragraph:"UwU UwU UwU UwU UwU UwU UwU UwU UwU UwU UwU UwU UwU UwU UwU UwU"},
+        {index: 2,type: "slider"},
+        {index: 3,type: "paragraph", title: "Hey there this is a title!", paragraph:"UwU UwU UwU UwU UwU UwU UwU UwU UwU UwU UwU UwU UwU UwU UwU UwU"},
+      ];
     }
   },
   async create() {
-    await store.dispatch('getData');
+    await this.$store.dispatch('getData');
   }
 }
 </script>
 
 <style scoped>
-span {
+#home-div {
+  overflow: auto;
+}
+
+.item-thing {
   display: block;
-  height: 50vh;
+  width: 100vw;
+  min-height: 10vh;
 }
 </style>

@@ -5,18 +5,27 @@
 
       </div>
 
-      <img v-bind:class="{visable : current == 1}" :src="image1"/>
-      <img v-bind:class="{visable : current == 2}" :src="image2"/>
+      <div class="image" id="image1" v-bind:class="{visable : current == 1}" />
+      <div class="image" id="image2" v-bind:class="{visable : current == 2}"/>
     </div>
   </div>
 </template>
 
+
+if () {
+
+}
+
+if ()
+{
+
+}
+
+
+
 <script>
 export default {
   name: 'slider',
-  props: {
-    data: Object,
-  },
   data() {
     return {
       current: 1,
@@ -25,29 +34,31 @@ export default {
   },
   methods: {
     changePhoto() {
+      console.log("HIJISDF");
       if (this.current == 1) this.current = 2;
       else this.current = 1;
 
-      this.index = (this.index + 1) % this.data.length;
     },
   },
   computed: {
-    image1() {
-      return "../../assets/images/art_01.jpg";
-    },
 
-    image2() {
-      return "../../assets/images/coding_01.jpg";
-    },
   },
   created() {
-    setInterval(this.changePhoto(), 3000);
-  }
+    setInterval(this.changePhoto, 8000);
+  },
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+@keyframes zoom {
+  0% {
+    background-size: 100% auto;
+  }
+  100% {
+    background-size: 120% auto;
+  }
+}
 #slider-div {
   display: block;
   position: relative;
@@ -55,17 +66,29 @@ export default {
   height: 500px;
 }
 
-img {
+.image {
   position: absolute;
+  z-index: -100;
   width: 100%;
   height: 100%;
   display: block;
   opacity: 0;
-  transition: all .5s ease;
+  transition: all 1.5s ease;
+  background-size: 100% auto;
+  animation: 9s zoom linear 0s infinite;
 }
 
 .visable {
   opacity: 1;
+  
+}
+
+#image1 {
+  background-image: url("../../assets/images/coding_02.jpg");
+}
+
+#image2 {
+  background-image: url("../../assets/images/robotics_02.jpg");
 }
 </style>
 

@@ -15,6 +15,7 @@
   left: 0px;
   top: 0px;
   width: 100vw;
+  overflow: auto;
 }
 #nav {
   padding: 30px;
