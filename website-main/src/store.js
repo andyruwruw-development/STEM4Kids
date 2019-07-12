@@ -14,18 +14,7 @@ export default new Vuex.Store({
 
       },
       home: [
-        {
-          index: 0,
-          type: "slider",
-          list: [
-           {link: "./public/hi.jpg", title: "", href: "/locatyions", paragraph: "paragraph"},
-           {link: "./public/hi.jpg", title: "", href: "/locatyions", paragraph: "paragraph"},
-           {link: "./public/hi.jpg", title: "", href: "/locatyions", paragraph: "paragraph"},
-          ]
-        },
-      ],
-      pages: [
-
+        {type: "slider", index: 0, slides: [{path: "/", title: "Progressive Curriculum", description: "Students will advance week by week with new curriculum."}], link: "/"},
       ],
     },
   },
@@ -36,9 +25,7 @@ export default new Vuex.Store({
   },
   actions: {
     async getData(context) {
-      console.log("HI");
-      var dataObject = 
-      await context.commit('setData', dataObject);
+
     }
   }
 })

@@ -53,10 +53,6 @@ export default {
 <style scoped>
 
 #header-div {
-  position: fixed;
-  top: 0px;
-  left: 0px;
-
   width: 100vw;
   justify-content: space-between;
   
@@ -70,7 +66,8 @@ export default {
 }
 
 h1 {
-  color: grey;
+  color: rgb(255, 255, 255);
+  text-shadow: 2px 2px 2px #00000098;
   font-size: 110%;
 
   cursor: pointer;
@@ -79,10 +76,12 @@ h1 {
 
 #logo-div {
   margin-top: 10px;
+  
 }
 
 #stem-logo {
   height: 50px;
+  background-color: rgba(252, 252, 252, 0.132);
 }
 
 #website-title {

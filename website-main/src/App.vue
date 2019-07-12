@@ -5,17 +5,23 @@
 </template>
 
 <style>
+body {
+  overflow: auto;
+  margin: 0;
+}
+
 #app {
   font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  display: block;
   text-align: center;
-  color: #2c3e50;
-  position: fixed;
+  position: absolute;
   left: 0px;
-  top: 0px;
-  width: 100vw;
-  overflow: auto;
+  right: 0px;
+  color: #2c3e50;
+  width: 100%;
+  
 }
 #nav {
   padding: 30px;

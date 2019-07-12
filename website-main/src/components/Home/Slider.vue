@@ -11,18 +11,6 @@
   </div>
 </template>
 
-
-if () {
-
-}
-
-if ()
-{
-
-}
-
-
-
 <script>
 export default {
   name: 'slider',
@@ -63,7 +51,8 @@ export default {
   display: block;
   position: relative;
   width: 100vw;
-  height: 500px;
+  height: 70vh;
+  min-height: 600px;
 }
 
 .image {
@@ -75,11 +64,12 @@ export default {
   opacity: 0;
   transition: all 1.5s ease;
   background-size: 100% auto;
+  background-position: center;
   animation: 9s zoom linear 0s infinite;
 }
 
 .visable {
-  opacity: 1;
+  opacity: .8;
   
 }
 
