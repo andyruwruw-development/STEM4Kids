@@ -1,7 +1,6 @@
 <template>
-  <div class="home">
+  <div class="profile">
     <Header/>
-
     <Footer/>
   </div>
 </template>
@@ -14,15 +13,14 @@ import Menu from '@/components/General/Menu.vue'
 
 
 export default {
-  name: 'home',
+  name: 'profile',
   components: {
     Header,
     Footer,
     Menu
   },
   async created() {
-    await this.$store.dispatch("resetPath");
-    let payload = {path: {name: "Courses", path: "/"}}
+    let payload = {path: {name: "Profile", path: "/profile"}}
     await this.$store.dispatch("pushPath", payload);
   }
 }

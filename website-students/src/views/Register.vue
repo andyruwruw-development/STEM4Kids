@@ -1,5 +1,6 @@
 <template>
-  <div class="home">
+  <div class="register">
+      <Header/>
 
   </div>
 </template>
@@ -8,11 +9,13 @@
 // @ is an alias to /src
 import Header from '@/components/General/Header.vue'
 
-
 export default {
-  name: 'home',
+  name: 'register',
   components: {
-    Header
+    Header,
+  },
+  async created() {
+    await this.$store.dispatch("resetPath");
   }
 }
 </script>
