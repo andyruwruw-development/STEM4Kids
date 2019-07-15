@@ -1,6 +1,8 @@
 <template>
   <div class="menucomp">
-    
+    <div id="menu-div">
+
+    </div>
   </div>
 </template>
 
@@ -25,5 +27,11 @@ export default {
 </script>
 
 <style scoped>
-
+#menu-div {
+  display: block;
+  width: 20vw;
+  min-width: 200px;
+  min-height: 10px;
+  background-color: grey;
+}
 </style>

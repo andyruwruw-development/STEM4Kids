@@ -120,7 +120,7 @@ export default {
 p {
   font-weight: lighter;
   text-align: center;
-  font-size: 1em;
+  font-size: .9em;
 }
 
 #login {

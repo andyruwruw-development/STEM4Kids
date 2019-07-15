@@ -33,14 +33,12 @@ export default {
       }
   },
   methods: {
-      login() {
+      async login() {
+        let payload = {username: this.username, password: this.password};
         if (this.username != "" && this.password != "")
-        {
-
-        }
-        else {
+            await this.$store.dispatch("login", payload);
+        else
             this.error = "Please fill in the following fields.";
-        }
       },
       registerInstead() {
           this.$router.push("/register");

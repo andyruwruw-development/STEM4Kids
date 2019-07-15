@@ -21,7 +21,7 @@ export default {
   },
   async created() {
     let payload = {path: {name: "Profile", path: "/profile"}}
-    await this.$store.dispatch("pushPath", payload);
+    await this.$store.dispatch("pathPush", payload);
   }
 }
 </script>
