@@ -1,7 +1,7 @@
 <template>
   <div class="menucomp">
     <div id="menu-div">
-
+      <p>Welcome Back {{user.name}}</p>
     </div>
   </div>
 </template>
@@ -18,7 +18,9 @@ export default {
 
   },
   computed: {
-
+    user() {
+      return this.$store.state.user;
+    }
   },
   created() {
 
@@ -30,8 +32,14 @@ export default {
 #menu-div {
   display: block;
   width: 20vw;
+  padding: 20px;
   min-width: 200px;
-  min-height: 10px;
-  background-color: grey;
+  min-height: 50vh;
+  background-color: rgb(66, 62, 79);
+}
+
+p {
+  color: white;
+  margin: 0px;
 }
 </style>

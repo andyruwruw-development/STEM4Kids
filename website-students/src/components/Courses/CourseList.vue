@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     list() {
-      return this.$store.state.list;
+      return this.$store.state.profile.courses;
     },
   },
   created() {
@@ -38,5 +38,11 @@ export default {
   display: block;
   width: 50%;
   min-height: calc(100vh - 65px - 60px);
+}
+
+.course {
+  display: block;
+  width: 20%;
+  background-color: rgb(0,0,0,.2);
 }
 </style>

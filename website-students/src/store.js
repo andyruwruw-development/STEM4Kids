@@ -6,10 +6,18 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: {username: "andyruwruw"},
-    path: [],
+    user: {
+      username: "andyruwruw",
+      name: "Andrew Young"
+    },
+    profile: {
+      level: 1,
+      xp: 100,
+      achievements: [],
+      courses: [{name: "Python", qpercent: .5, epercent: .6, lpercent: .7, enabled: true}],
+    },
 
-    courses: null,
+    path: [],
 
     course: null,
     list: [],

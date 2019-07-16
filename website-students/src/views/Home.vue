@@ -1,9 +1,10 @@
 <template>
   <div class="home">
     <Header/>
-    <div id="home-body" class="flex flex-space-around">
+      
+    <div id="home-body" class="flex">
       <Menu id="menu-position" />
-      <CourseList/>
+      <CourseList id="courselist" />
     </div>
     <Footer/>
   </div>
@@ -41,9 +42,11 @@ export default {
 }
 
 #menu-position {
-  position: absolute;
   width: 20%;
-  left: 0px;
-  top: 0px;
+}
+
+#courselist {
+  display: block;
+  width: 75%;
 }
 </style>
