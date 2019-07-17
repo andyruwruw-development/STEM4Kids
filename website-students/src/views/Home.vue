@@ -3,7 +3,6 @@
     <Header/>
       
     <div id="home-body" class="flex">
-      <Menu id="menu-position" />
       <CourseList id="courselist" />
     </div>
     <Footer/>
@@ -37,16 +36,17 @@ export default {
 
 <style scoped>
 #home-body {
-  position: relative;
+  display: flex;
   width: 100vw;
 }
 
 #menu-position {
-  width: 20%;
+  display: block;
 }
 
 #courselist {
   display: block;
-  width: 75%;
+  padding: 25px;
+  width: calc(100% - 50px);
 }
 </style>

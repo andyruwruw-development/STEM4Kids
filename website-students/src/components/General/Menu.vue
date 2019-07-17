@@ -34,7 +34,7 @@ export default {
   width: 20vw;
   padding: 20px;
   min-width: 200px;
-  min-height: 50vh;
+  min-height: calc(100vh - 65px);
   background-color: rgb(66, 62, 79);
 }
 

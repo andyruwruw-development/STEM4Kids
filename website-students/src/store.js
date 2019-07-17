@@ -14,7 +14,9 @@ export default new Vuex.Store({
       level: 1,
       xp: 100,
       achievements: [],
-      courses: [{name: "Python", qpercent: .5, epercent: .6, lpercent: .7, enabled: true}],
+      courses: [{name: "Introduction to Python Python Python", qpercent: .5, epercent: .6, lpercent: .7, enabled: true},
+      {name: "C++", qpercent: .5, epercent: .6, lpercent: .7, enabled: true},
+      ],
     },
 
     path: [],
