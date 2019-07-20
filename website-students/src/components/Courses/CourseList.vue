@@ -3,9 +3,9 @@
     <h1>Active Courses</h1>
     <div id="courselist-div">
       <div id="courses">
-        <div @click="course(course.name)" v-for="course in list" v-bind:key="course.name" class="course">
+        <div v-bind:class="{enabled : course.enabled, salmon: course.color == 'salmon', indianred: course.color == 'indianred', crimson: course.color == 'crimson', salmon: course.color == 'salmon', salmon: course.color == 'salmon', salmon: course.color == 'salmon', salmon: course.color == 'salmon', salmon: course.color == 'salmon', salmon: course.color == 'salmon', salmon: course.color == 'salmon', salmon: course.color == 'salmon', salmon: course.color == 'salmon', salmon: course.color == 'salmon', salmon: course.color == 'salmon', }"
+        @click="course(course.name)" v-for="course in list" v-bind:key="course.name" class="course">
           <p>{{course.name}}</p>
-
         </div>
       </div>
     </div>
@@ -22,7 +22,8 @@ export default {
   },
   methods: {
     async course(coursename) {
-      await this.$store.dispatch("splicePath", payload);
+      let payload = {course: coursename};
+      await this.$store.dispatch("getCourse", payload);
     },
   },
   computed: {
@@ -52,7 +53,7 @@ export default {
   width: 250px;
   height: 300px;
 
-  background-color: rgb(0,0,0,.2);
+  background-color: rgba(255, 71, 71, 0.982);
   margin: 20px;
 
   border-radius: 10px;
@@ -65,7 +66,8 @@ export default {
 }
 
 .course:hover {
-  box-shadow: 5px 8px 8px rgba(2, 2, 2, 0.425);
+  transform: translateX(-2px) translateY(-2px);
+  box-shadow: 8px 8px 8px rgba(2, 2, 2, 0.425);
 }
 
 p {
@@ -81,4 +83,12 @@ h1 {
   margin-left: 20px;
   text-align: left;
 }
+</style>
+
+<style scoped>
+.red {
+  
+}
+
+.indianred {}
 </style>
