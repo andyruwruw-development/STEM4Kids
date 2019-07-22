@@ -4,7 +4,7 @@
     <div id="main-flex">
       <Menu id="menu-comp"/>
       <div id="page">
-        <Material v-if="page == 'material'"/>
+        <Material v-if="page == 'material'" />
       </div>
     </div>
   </div>
