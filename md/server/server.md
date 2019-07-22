@@ -2,19 +2,100 @@
 
 This is a rundown of everything I know about writing RESTful APIs.
 
+Feel free to text me any questions. I'm not that great at explaining concepts and hope that this at least serves as a reference.
+
+Don't forget to [Install MongoDB](#installmongo) first.
+
+Happy coding.
+
 ## Table of Contents
+
 1. <a href="#pre">Preface:</a> JavaScript Syntax
-1. <a href="#part1">Part 1:</a> What is an Express Server Middleware
-2. <a href="#part2">Part 2:</a> Request Routing - Finding the Right Function
+2. <a href="#part1">Part 1:</a> What is an Express Server Middleware
+3. <a href="#part2">Part 2:</a> Request Routing - Finding the Right Function
    1. <a href="#part2-part1">Method 1:</a> Request Type
    2. <a href="#part2-part2">Method 2:</a> Request Path
    3. <a href="#part2-part3">Method 3:</a> Routing to Multiple Files
-3. <a href="#part3">Part 3:</a> Creating the Server
+4. <a href="#part3">Part 3:</a> Creating the Server
    1. <a href="#part3-part1">Section 1:</a> Installation of Packages
    2. <a href="#part3-part2">Section 2:</a> The Router
    3. <a href="#part3-part3">Section 3:</a> Server Files
    4. <a href="#part3-part4">Section 4:</a> Mongoose Schemas and Objects
    5. <a href="#part3-part5">Section 5:</a> Server Functions
+   6. <a href="#part3-part6">Section 6:</a> Stuff Mongoose Can Do
+   7. <a href="#part3-part7">Section 7:</a> POST Functions
+5. <a href="#part4">Part 4:</a> Tips and Tricks
+   1. <a href="#part4-part1">Tip 1:</a> Path Parameters
+   2. <a href="#part4-part2">Tip 2:</a> Logging Created Times
+   3. <a href="#part4-part3">Tip 3:</a> User File
+   4. <a href="#part4-part4">Tip 4:</a> Proper Permissions
+   5. <a href="#part4-part5">Tip 5:</a> User Data
+   6. <a href="#part4-part6">Tip 6:</a> Helping Functions
+   7. <a href="#part4-part7">Tip 7:</a> Using `_id` for Cool Stuff
+6. <a href="#part5">Part 5:</a> Running the Server
+
+<h1 id="installmongo">MongoDB Installation</h1>
+
+Before we get started on anything you'll need to start a Mongo Database server on your computer!
+
+If you plan on working on multiple computers I would do this on both.
+
+There is [installation documentation](https://docs.mongodb.com/manual/installation/) on the Mongo website but below summarizes the steps on each OS.
+
+## Installing on MacOS
+
+First, tap the official MongoDb repositiory.
+
+```
+brew tap mongodb/brew
+```
+If your mac isn't letting you use brew, you can install [Homebrew](https://brew.sh/) again.
+
+After that is done, install Mongo.
+```
+brew install mongodb-community@4.0
+```
+
+To run from the command line in the foreground:
+```
+mongod --config /usr/local/etc/mongod.conf
+```
+To run as a service:
+```
+brew services start mongodb-community@4.0
+```
+## Installing on Windows
+
+First, [download the Windows 64-bit](https://www.mongodb.com/download-center/community?jmp=docs), MSI installation for the current version.
+
+Next, double-click the MSI file you downloaded. You can install with the defaults. Install MongoDB Compass for a GUI for the database.
+
+## R u a hardcore coder with Linux?
+To install MongoDB:
+```
+sudo apt update
+sudo apt install mongodb
+```
+Mongo will run on port `27017` by default.
+
+Check if it's chuggin:
+```
+sudo systemctl status mongodb
+```
+Stop it:
+```
+sudo systemctl stop mongodb
+```
+To start or restart Mongo:
+```
+sudo systemctl start mongodb
+sudo systemctl restart mongodb
+```
+By default Mongo is setup to run automatically to disable/enable this behavior:
+```
+sudo systemctl disable mongodb
+sudo systemctl enable mongodb
+```
 
 <h1 id="pre">Preface: Javascript Syntax</h1>
 
@@ -25,6 +106,16 @@ Declaring Variables
 var foo = "Soup";
 let bar = 12;
 const baz = [1, 2, 3];
+```
+
+```
+Creating Functions 
+
+function foo(bar) {
+  let baz = bar * 100;
+  baz += "%";           // Changes it to a string.
+  return baz;
+}
 ```
 
 <h1 id="part1">Part 1: What is an Express Server Middleware</h1>
@@ -130,6 +221,8 @@ npm install express mongoose bcrypt jsonwebtoken cookie-parser
 
 <h2 id="part3-part2">Section 2: The Router</h2>
 
+[Example Router](https://github.com/andyruwruw/To-Do-Personal/blob/master/server/todoserver.js)
+
 We can then create our first file, the router.
 
 To start we need to import the packages we want to use.
@@ -181,6 +274,8 @@ app.use("/api/example", example.routes);
 Change out `example` with the name and topic of each file. This will be used by Express to correctly route each request to it's desired file.
 
 <h2 id="part3-part3">Section 3: Server Files</h2>
+
+[Example Server File](https://github.com/andyruwruw/To-Do-Personal/blob/master/server/item.js)
 
 Server files you create need a few things to work properly.
 
@@ -263,16 +358,17 @@ In cases where the path is simply
 ```
 GET /api/locations
 ```
-You can create the previous function as such -
+You can create the previous function as -
 ```
 router.get("/", async (req, res) => {
 
 });
 ```
+because the first two items are removed by the router.
 
 More to note, `async (req, res) => { }` is syntax for JavaScript to run the function between the brackets with `req(request)` and `res(response)` as parameters.
 
-An `async` function is a long subject. All I usually take away from it is it's (<-- that was cool) enabling of you to use `await`. To be discussed in a few paragraphs.
+An `async` function is a long subject. All I usually take away from it is it's (<-- it its is it isn't is it) enabling of you to use `await`. I'll talk about that in a little bit.
 
 Say we wanted to find an item from within the *Mongo Database* called `Item`.
 
@@ -290,11 +386,16 @@ router.get("/", async (req, res) => {
 ```
 The purpose of `console.log` is simply debugging. It's JavaScripts `print` or `cout` or `System.out.println()` ( <<< last one is gross).
 
+
+
+
+
+
 Within the `try` statement we're going to find our item, and then send it back in the `response`.
 
 There's two ways to find things in Mongoose: `find` and `findOne`. 
 
-*Find* will return and `array` of results with the given parameters. 
+*Find* will return and `array` of results that match a set of given parameters. 
 
 I wrote "Find one will find one" but that's redundant. It returns one object.
 
@@ -302,7 +403,7 @@ I wrote "Find one will find one" but that's redundant. It returns one object.
 router.get("/", async (req, res) => {
     try {
       let item = await Item.findOne({
-        subject: req.body.subject,
+        subject: "quetzal",
       });
       return res.send(item);
     } catch (error) {
@@ -317,18 +418,19 @@ We then specify what TYPE of object we want to find with our `Item` object we de
 
 `findOne` is opened up and we set the parameters as to what Item we want to find.
 
-Mongoose will search the database in our `Item` collection, looking for an Item that matches the parameters we want.
+In this case, it will find an item with `subject` of *"quetzal"* and return it.
 
-
-
+Now say we want to do something with `item` after we load it.
 
 ```
-router.get("/view/:subject/:topicIndex/:type/:index", async (req, res) => {
+router.get("/", async (req, res) => {
     try {
       let item = await Item.findOne({
-        _id: req.params.subject,
+        subject: "quetzal",
       });
+
       item.data += 1;
+
       return res.send(item);
     } catch (error) {
       console.log(error);
@@ -337,4 +439,475 @@ router.get("/view/:subject/:topicIndex/:type/:index", async (req, res) => {
 });
 ```
 With web programming, you have to account for the fact that some things take a while to load.
+
+`await` within an `async` function is like a **pause** until the file has been found and loaded. For example, all of my server calls have to be `async` to allow the data to first to sent back from the server.
+
+The statement `return res.send(item);` will send item back to the client.
+
+When a request is made, a **payload** can be added to it, or an object with data.
+
+For example, I can ask for a lesson, and in the payload, specify the subject and index, which can be used to find it.
+
+Data sent in the payload can be accessed through -
+```
+req.body.var_name
+```
+So if my payload was -
+```
+{
+  subject: "Science",
+  index: 2,
+}
+```
+You could access the `subject` through `req.body.subject`.
+
+<h2 id="part3-part6">Section 6: Stuff Mongoose Can Do</h2>
+
+```
+Find One
+
+await Item.findOne({   // Nothing i
+  key: value,
+  key: value,
+});
+
+Returns Object
+```
+
+```
+Find Many
+
+await Item.find({             // Leaving find({}) empty will return all items.
+  key: value,
+  key: value,
+});
+
+Returns Array of Items
+```
+
+```
+Delete One
+
+await Item.deleteOne({
+  key: value,
+  key: value,
+});
+
+Returns Object with Confirmation
+```
+
+```
+Delete Many
+
+await Item.deleteMany({
+  key: value,
+  key: value,
+});
+
+Returns Object with Confirmation
+```
+
+```
+Change Data
+
+await Item.updateOne({
+  key: value,       // Finds Object based on These
+  key: value,
+},
+{
+  $set: {           // Changes this data. Optional
+    key: newValue,
+    key: newValue,
+  },
+  $push {           // Push data, Optional.
+    key: value,
+  },
+});
+
+Returns Object with Confirmation
+```
+
+```
+Find and Sort Array of Objects
+
+await Item.find({
+  key: value,       // Finds Object based on These
+  key: value,
+}).sort({
+  key: -1 OR 1 (ascending or descending)
+});
+
+Returns Sorted Array of Objects
+```
+
+<h2 id="part3-part7">Section 7: POST Functions</h2>
+
+`POST` functions create new items and are a bit different.
+
+Say we have the schema:
+```
+const itemSchema = new mongoose.Schema({
+    title: String
+  });
+  
+  const Item = mongoose.model('Item', itemSchema);
+```
+You would right a `POST function` as follows with the right path.
+```
+router.post("/", async (req, res) => {
+    const item = new Item({
+      title: req.body.title,
+    });
+    try {
+      await item.save();
+      return res.send(items);
+    } catch (error) {
+      console.log(error);
+      return res.sendStatus(500);
+    }
+  });
+```
+
+Create a new item using the syntax `const item = new Item` with the correct object name in place of `item` and `Item`.
+
+Within a try and catch, `await item.save()` is used to save the item to the database.
+
+I usually send the new item to the client as well for immediate display.
+
+
+<h1 id="part4">Part 4: Tips and Tricks</h1>
+
+
+<h2 id="part4-part1">Tip 1: Path Parameters</h2>
+
+```
+router.get("/:location/:username", async (req, res) => {
+    try {
+      let item = await Item.findOne({
+        username: req.params.username,
+        location: req.params.location,
+      });
+
+      return res.send(item);
+    } catch (error) {
+      console.log(error);
+      return res.sendStatus(500);
+    }
+});
+```
+
+Notice the use of `/:location/:username` in the path for the function.
+
+These essentially become parameters accessable through `req.params.var_name`.
+
+Meaning, if I called the function by -
+```
+GET /api/location/cupertino/andrew
+```
+The first two variables would be removed by Express, and `req.params.location` would have the value **"cupertino"**, and `req.params.location` would have **"andrew"**.
+
+<h2 id="part4-part2">Tip 2: Logging Created Times</h2>
+
+```
+const itemSchema = new mongoose.Schema({
+    title: String,
+
+    created: {
+      type: Date,
+      default: Date.now
+    },
+  });
+```
+
+Adding the following `created` to the bottom of your schema can be really useful.
+
+Within the *POST function*, you don't need to set `created`, it will automatically create a *Date Object* the moment it was created.
+
+```
+router.post("/", async (req, res) => {
+    const item = new Item({
+      title: req.body.title,
+    });
+    try {
+      await item.save();
+      return res.send(items);
+    } catch (error) {
+      console.log(error);
+      return res.sendStatus(500);
+    }
+  });
+```
+
+This allows you to send back arrays of items sorted in order of date created.
+
+```
+router.get("/", async (req, res) => {
+  try {
+    let items = await Item.find({
+    }).sort({
+      created: -1
+    });
+    return res.send(comments);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+  });
+```
+
+The `sort({created: -1})` will arrange the array of items in reverse order.
+
+<h2 id="part4-part3">Tip 3: User File</h2>
+
+So I took the class on web design this last fall, and we learned all about salting and hashing passwords to have consistant, irreversable passwords hashed and not stored in plain text.
+
+Along with storing webtokens with user data so they don't have to login everytime with the same device.
+
+Honestly because the process is always the same, I used the same file and rarely make changes, and I'd suggest doing the same.
+
+If you want to read into it and figure it out go ahead!
+
+[Student (User) File](./users.js)
+
+[Admin (User) File](./admins.js)
+
+[Parent (User) File](./parents.js)
+
+But go ahead and copy the file into the server.
+
+They all require the file [auth.js](./auth.js) which verfies tokens.
+
+Files with links to `auth.js` at the top need to be in same directory as the file.
+
+<h2 id="part4-part4">Tip 4: Proper Permissions</h2>
+
+Say we have a function that allows admins to add new admins.
+
+In order to ensure only admins have access to that function, we can add verfication.
+
+At the top of the file under `const router = express.Router();` add the following link to our `auth.js` file.
+
+```
+const mongoose = require('mongoose');
+const express = require("express");
+const router = express.Router();
+const auth = require("./auth.js");
+```
+
+This brings us to something I mentioned I would talk about earlier.
+```
+module.exports = {
+    model: Item,
+    routes: router,
+}
+```
+At the bottom of each of your files you should have an export that leads back to the router.
+
+When we created schemas, we initialized a template object called `Item`. Every file will have a different schema and template object. You can add the template object to `model: Item,` to export it and allow other files to import it for their own use.
+
+So always ensure that the object you're dealing with is getting exported at the bottom.
+
+So lets import that object into the file we just added `const auth = require("./auth.js");` to. Add the following to import the `User` object from `user.js`. Add it right below where we imported `auth.js`.
+
+```
+const mongoose = require('mongoose');
+const express = require("express");
+const router = express.Router();
+const auth = require("./auth.js");
+
+const users = require("./users.js");
+const User = users.model;
+```
+
+The user object is now available for us to use to verify login information, and protect functions from running without proper authentication.
+
+To do this we add the following to our functions that require login to access.
+```
+router.get("/", auth.verifyToken, User.verify, async (req, res) => {
+    try {
+
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(500);
+    }
+});
+```
+`auth.verifyToken` is a method within `auth.js` which will check for stored cookies with proper login information.
+
+`User.verify` will validate a user account by looking it up in our database.
+
+The same can be done with `parents.js` and `admins.js`.
+```
+const parents = require("./parents.js");
+const Parent = parents.model;
+
+router.get("/", auth.verifyToken, Parent.verify, async (req, res) => {
+```
+```
+const admins = require("./admins.js");
+const Admin = admins.model;
+
+router.get("/", auth.verifyToken, Admin.verify, async (req, res) => {
+```
+<h2 id="part4-part5">Tip 5: User Data</h2>
+
+Students will all have their own profiles, which requires us to bind their unique `User` object to a new `StudentProfile` object.
+
+To start, don't forget to import `auth.js` and the `User` objects.
+```
+const auth = require("./auth.js");
+
+const users = require("./users.js");
+const User = users.model;
+```
+
+Next, for the schema of a profile, we can tell mongoose that one of data pieces will be a `User` object with the following syntax.
+
+```
+const itemSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+    },
+
+    // Other Data
+
+  });
+  
+  const Item = mongoose.model('Item', itemSchema);
+```
+When we use a `POST` function to create a new item, usually you go through the following:
+```
+router.post("/", async (req, res) => {
+    const item = new Item({
+      title: req.body.title,
+    });
+    try {
+      await item.save();
+      return res.send(items);
+    } catch (error) {
+      console.log(error);
+      return res.sendStatus(500);
+    }
+  });
+```
+Using `req.body.var_name ` to access `request` data.
+
+However when sent a `request`, the `User` information will be available in `req.user` as opposed to `req.body`. So you can simply write a `POST` function with a user's `User` object as a piece of data as follows:
+```
+router.post("/", auth.verifyToken, User.verify, async (req, res) => {
+    const item = new Item({
+      user: req.user,
+      title: req.body.title,
+    });
+    try {
+      await item.save();
+      return res.send(item);
+    } catch (error) {
+      console.log(error);
+      return res.sendStatus(500);
+    }
+  });
+```
+Same goes for `Admin` and `Parent`.
+```
+admin: req.user
+```
+```
+parent: req.user
+```
+I'll be using the variable name `user` for all three, it's up to the server to have the `User` for kids, `Parent` for parents, and `Admin` for admins. The only place you should have to use `user` universally is accessing `req.user`.
+
+Additionally, each Parent will have a profile with their kids as data pieces.
+
+Here you can get away with just an empty array:
+```
+const itemSchema = new mongoose.Schema({
+    parent: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+    },
+
+    kids: [] 
+    // OR 
+    // kids: Array
+
+  });
+  
+  const Item = mongoose.model('Item', itemSchema);
+```
+And then just have a function for adding kids.
+
+Honestly that one is going to be tricky and I'm still planning it out in my head, we can talk throught it together!
+
+<h2 id="part4-part6">Tip 6: Helping Functions</h2>
+
+Feel free to add more functions to clean up the code!
+
+Back when I coded chess, I kept all the chess logic in my server. Ensuring no one could cheat by changing their own source code.
+
+Syntax for functions is at [JavaScript Syntax](pre).
+
+<h2 id="part4-part7">Tip 7: Using `_id` for Cool Stuff</h2>
+
+It's not that interesting actually.
+
+Every item in your Mongoose server is saved with a `_id` regardless if you add it to the `schema`. These `_id` can be manually set in the `POST` function, and can be useful to finding items by a unique id.
+
+<h1 id="part5">Part 5: Running the Server</h1>
+
+Alright time to test out the server.
+
+Hopefully we're working together and the front-end has a way to show if everything's working.
+
+Use command line to start up the website. Within command line, go to the folder of the website we're trying out and run:
+```
+npm run serve
+```
+Open a new command line window and go to your server file.
+
+Then run the following with the name of your router file:
+```
+node router_file_name.js
+```
+Any `console.log()` statements you've entered for debugging purposes should appear on the second command line window where you ran the server.
+
+When we're finally done with everything, we'll be using a node library called `forever` to run the server, which will take care of running it without us having to have command line open.
+
+```
+npm install forever -g
+```
+That should install it globally so it doesn't matter where you are.
+
+You can run the server now with:
+```
+forever start router_file_name.js
+```
+You can check its status with:
+``` 
+forever list
+```
+I've always found whenever I first run `forever` it gives a weird error message. Checking the list to see if it's `STOPPED` is the best way to see if it's actually running.
+
+Otherwise it will have a number as to how long it's been running, which mean's you're all good.
+
+To stop a server, you use it's index from `forever list`.
+```
+forever stop 0
+```
+
+
+
+---
+---
+---
+---
+## HUZZAH! YOU NOW KNOW EVERYTHING I KNOW.
+Feel free to ask questions.
+
+---
+---
+---
+---
+
 
