@@ -19,10 +19,9 @@
     </div>
     <div class="flex">
       <div class="flex flex-vert-cent flex-space-around link " id="notification">
-        <div id="inbox-icon" class="icon left"></div>
+        <div id="inbox-icon" class="icon"></div>
       </div>
       <div class="flex flex-vert-cent flex-space-around link" id="profile">
-        <div id="profile-icon" class="icon left"></div>
         <p>{{user.username}}</p>
       </div>
     </div>
@@ -58,6 +57,7 @@ export default {
   background-color: rgb(44, 129, 220);
   box-shadow: 0px 3px 3px rgb(190, 190, 190);
   border-bottom: 5px solid white;
+  padding-right: 20px;
 }
 </style>
 
@@ -66,13 +66,17 @@ export default {
 .link {
   height: 100%;
   min-width: 50px;
-  padding: 0px 30px;
+  padding: 0px 20px;
   transition: all .2s ease;
   cursor: pointer;
   color: #fefefe;
   font-size: 1.3em;
   font-weight: bolder; 
   font-family: 'Roboto Slab', serif;
+}
+
+#profile {
+  padding-right: 50px;
 }
 
 .active {
