@@ -5,12 +5,26 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: {username: "Andrew"},
+    user: null,
+    profile: null,
+
+    feed: null,
+
+    staff: null,
+    calendar: null,
+    staffprofile: null,
+    
+
   },
   mutations: {
-
+    setUser(state, user) {
+      state.user = user;
+    },
+    setFeed(state, feed) {
+      state.feed = feed;
+    },
   },
   actions: {
-
+    
   }
 })
