@@ -1,27 +1,27 @@
 <template>
   <div class="headercomp flex flex-space-between">
     <div class="flex">
-      <div class="flex flex-vert-cent flex-space-around link " id="logo">
+      <div class="flex flex-vert-cent flex-space-around link" id="logo" @click="router('/')">
         <div id="logo-icon" class="icon"></div>
       </div>
-      <div class="flex flex-vert-cent flex-space-around link ">
+      <div v-if="user != null" class="flex flex-vert-cent flex-space-around link" @click="router('/')">
         <p>Home</p>
       </div>
-      <div class="flex flex-vert-cent flex-space-around link ">
+      <div v-if="user != null" class="flex flex-vert-cent flex-space-around link" @click="router('/camp')">
         <p>Camp</p>
       </div>
-      <div class="flex flex-vert-cent flex-space-around link ">
+      <div v-if="user != null" class="flex flex-vert-cent flex-space-around link" @click="router('/staff')">
         <p>Staff</p>
       </div>
-      <div class="flex flex-vert-cent flex-space-around link ">
+      <div v-if="user != null" class="flex flex-vert-cent flex-space-around link" @click="router('/info')">
         <p>Info</p>
       </div>
     </div>
-    <div class="flex">
+    <div v-if="user != null" class="flex">
       <div class="flex flex-vert-cent flex-space-around link " id="notification">
         <div id="inbox-icon" class="icon"></div>
       </div>
-      <div class="flex flex-vert-cent flex-space-around link" id="profile">
+      <div class="flex flex-vert-cent flex-space-around link" id="profile" @click="router('/profile')">
         <p>{{user.username}}</p>
       </div>
     </div>
@@ -33,10 +33,14 @@ export default {
   name: 'headercomp',
   data() {
       return {
-
+        
       }
   },
   methods: {
+    router(path) {
+      this.$router.push(path);
+    },
+
   },
   computed: {
     user() {
@@ -44,6 +48,7 @@ export default {
     },
   },
   created() {
+
   }
 }
 </script>
@@ -56,7 +61,7 @@ export default {
   height: 65px;
   background-color: rgb(44, 129, 220);
   box-shadow: 0px 3px 3px rgb(190, 190, 190);
-  border-bottom: 5px solid white;
+  border-bottom: 3px solid white;
   padding-right: 20px;
 }
 </style>
