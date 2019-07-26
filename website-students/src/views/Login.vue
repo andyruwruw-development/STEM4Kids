@@ -4,9 +4,9 @@
     <h1>Welcome to STEM-4-Kids.</h1>
     <div id="form">
         <h2>Let's Login and Get Started!</h2>
-        <p>{{error}}</p>
-        <input v-bind:class="{error : error != '' && username == ''}" type="text" v-model="username" placeholder="Username"/>
-        <input v-bind:class="{error : error != '' && password == ''}" type="password" v-model="password" placeholder="Password"/>
+        <p class="error">{{error}}</p>
+        <input type="text" v-model="username" placeholder="Username"/>
+        <input type="password" v-model="password" placeholder="Password"/>
         <div id="buttons" class="flex flex-horiz-cent">
             <button>Register Instead</button>
             <button @click="login">Login</button>
@@ -60,7 +60,7 @@ export default {
     padding: 20px;
 
     margin: 0 auto;
-    background-color: white;
+    background-color: rgb(33, 73, 111);
     box-shadow: 3px 3px 5px rgb(192, 192, 192);
 }
 
