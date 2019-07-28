@@ -7,8 +7,17 @@ class CreateStaff(FlaskForm):
     last_name = TextField("Last Name")
     username = TextField("Username")
     password = TextField("Password")
-
+    
 class UpdateStaff(FlaskForm):
     location = TextField("Location")
     phone = TextField("Phone")
     email = TextField("Email")
+
+class CreateCourse(FlaskForm):
+    course_name = TextField("Course Name")
+    course_compiler = TextField("Compiler")
+    course_color = TextField("Color")
+
+    ch_number = TextField("Chapter Number")
+    ch_name = TextField("Chapter Name")
+    ch_color = TextField("Chapter Color")
