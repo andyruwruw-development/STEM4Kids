@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="camp">
     <Header />
   </div>
 </template>
@@ -9,7 +9,7 @@
 import Header from '@/components/General/Header.vue'
 
 export default {
-  name: 'home',
+  name: 'camp',
   components: {
     Header
   },

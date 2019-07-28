@@ -3,8 +3,8 @@
     <h1>Active Courses</h1>
     <div id="courselist-div">
       <div id="courses">
-        <div v-bind:class="{enabled : course.enabled, salmon: course.color == 'salmon', indianred: course.color == 'indianred', crimson: course.color == 'crimson', salmon: course.color == 'salmon', salmon: course.color == 'salmon', salmon: course.color == 'salmon', salmon: course.color == 'salmon', salmon: course.color == 'salmon', salmon: course.color == 'salmon', salmon: course.color == 'salmon', salmon: course.color == 'salmon', salmon: course.color == 'salmon', salmon: course.color == 'salmon', salmon: course.color == 'salmon', }"
-        @click="course(course.name)" v-for="course in list" v-bind:key="course.name" class="course">
+        <div v-bind:class="{enabled : course.enabled}"
+        @click="course(course.name)" v-for="course in list" v-bind:key="course.name" class="indianred course">
           <p>{{course.name}}</p>
         </div>
       </div>
@@ -40,20 +40,20 @@ export default {
 <style scoped>
 #courselist-div {
   display: block;
-  min-height: calc(100vh - 65px - 60px);
+  min-height: calc(100vh - 65px - 60px - 15px);
 }
 
 #courses {
   display: flex;
-  flex-wrap: wrap
+  flex-wrap: wrap;
+  margin-left: 10px;
 }
 
 .course {
   display: block;
-  width: 250px;
+  width: 220px;
   height: 300px;
-
-  background-color: rgba(255, 71, 71, 0.982);
+  padding: 10px;
   margin: 20px;
 
   border-radius: 10px;
@@ -80,15 +80,84 @@ p {
 h1 {
   font-size: 1.5em;
   margin: 0;
-  margin-left: 20px;
+  margin-top: 20px;
+  margin-left: 35px;
+  margin-bottom: 5px;
+  color: rgba(63, 68, 83, 0.425);
   text-align: left;
 }
 </style>
 
 <style scoped>
-.red {
-  
+.indianred {
+  background-color: rgba(255, 71, 71, 0.982);
 }
 
-.indianred {}
+.crimson {
+  background-color: rgba(220,20,60, 0.982);
+}
+
+.mediumvioletred	 {
+  background-color: rgba(199,21,133, 0.982);
+}
+
+.orangered {
+  background-color: rgba(255,69,0, 0.982);
+}
+
+.darkorange {
+  background-color: rgba(255,140,0, 0.982);
+}
+
+.gold {
+  background-color: rgba(218,165,32, 0.982);
+}
+
+.deepmagenta {
+  background-color: rgba(139,0,139, 0.982);
+}
+
+.indigo {
+  background-color: rgba(75,0,130, 0.982);
+}
+
+.darkslateblue {
+  background-color: rgba(72,61,139, 0.982);
+}
+
+.seagreen {
+  background-color: rgba(46,139,87, 0.982);
+}
+
+.limegreen {
+  background-color: rgba(50,205,50, 0.982);
+}
+
+.forestgreen {
+  background-color: rgba(34,139,34, 0.982);
+}
+
+.teal {
+  background-color: rgba(0,128,128, 0.982);
+}
+
+.steelblue {
+  background-color: rgba(70,130,180, 0.982);
+}
+
+.royalblue {
+  background-color: rgba(65,105,225, 0.982);
+}
+
+.mightyblue {
+  background-color: rgba(25,25,112, 0.982);
+}
+
+.chocolate {
+  background-color: rgba(210,105,30, 0.982);
+}
+
+.maroon {
+  background-color: rgba(128,0,0, 0.982);
+}
 </style>

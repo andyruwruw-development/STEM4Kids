@@ -4,8 +4,8 @@
         <SubjectMenu v-if="subject == null" id="list"/>
         <List v-if="subject != null" id="list"/>
         <div id="main">
-            <ItemEdit />
-            <ItemView />
+            <ItemEdit v-if="!toggle"/>
+            <ItemView v-if="toggle"/>
         </div>
     </div>
   </div>
@@ -32,6 +32,7 @@ export default {
   data() {
       return {
           page: 0,
+          toggle: true,
       }
   },
   methods: {
@@ -66,3 +67,6 @@ export default {
     background-color: rgba(0, 0, 0, 0);
 }
 </style>
+
+
+
