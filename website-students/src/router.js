@@ -39,7 +39,7 @@ export default new Router({
       component: Profile
     },
     {
-      path: '/:course',
+      path: '/course/:course',
       name: 'course',
       component: Course
     },
