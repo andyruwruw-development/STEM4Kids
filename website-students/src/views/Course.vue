@@ -1,6 +1,7 @@
 <template>
   <div class="home">
-
+    <Header />
+    <CourseView />
   </div>
 </template>
 
@@ -8,11 +9,14 @@
 // @ is an alias to /src
 import Header from '@/components/General/Header.vue'
 
+import CourseView from '@/components/Courses/CourseView.vue'
+
 
 export default {
   name: 'home',
   components: {
-    Header
+    Header,
+    CourseView
   }
 }
 </script>

@@ -4,7 +4,7 @@
     <div id="courselist-div">
       <div id="courses">
         <div v-bind:class="{enabled : course.enabled}"
-        @click="course(course.name)" v-for="course in list" v-bind:key="course.name" class="indianred course">
+        @click="selectCourse(course.name)" v-for="course in list" v-bind:key="course.name" class="indianred course">
           <p>{{course.name}}</p>
         </div>
       </div>
@@ -21,9 +21,12 @@ export default {
       }
   },
   methods: {
-    async course(coursename) {
-      let payload = {course: coursename};
+    async selectCourse(coursename) {
+      let payload = {
+        course: coursename,
+      }
       await this.$store.dispatch("getCourse", payload);
+      this.$router.push("/course/" + coursename);
     },
   },
   computed: {
