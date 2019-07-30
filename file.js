@@ -1,4 +1,4 @@
-studentuser = {
+/* studentuser = {
     username: String,
     name: String,
     password: String,
@@ -32,7 +32,7 @@ quiz = {
 
 exercizes = {
 
-}
+} */
 
 // TEehee
 
