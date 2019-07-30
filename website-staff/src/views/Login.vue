@@ -102,8 +102,8 @@ export default {
 
 h2 {
   margin: 0 auto;
-  margin-bottom: 30px;
-  font-size: 2.5em;
+  margin-bottom: 35px;
+  font-size: 2.3em;
   text-align: left;
   width: calc(85% + 15px);
 }
@@ -117,7 +117,7 @@ input {
   background-color: rgb(255, 255, 255);
   border-radius: 5px;
   box-shadow: 3px 3px 3px rgba(19, 19, 19, 0.31);
-  border: 1px solid rgb(230, 229, 229);
+  border: 1px solid rgba(230, 229, 229, 0.068);
   margin-bottom: 25px;
 }
 
@@ -135,9 +135,10 @@ input {
   border-radius: 15px;
   color: white;
   font-size: 1.3em;
+  border: 1px solid rgba(0, 0, 0, 0.062);
   font-weight: bolder;
   margin: 0 auto;
-  margin-bottom: 10px;
+  margin-top: 40px;
 }
 
 .bottom {
