@@ -35,3 +35,29 @@ exercizes = {
 }
 
 // TEehee
+
+Lessons:
+{
+    course: "Python"
+    title: "Variables"
+    chapter: 1
+    section: 4
+    data: []
+}
+
+Chpater:
+{
+    course: 
+    name: chapter
+    num: 
+}
+
+List: {
+    course: "Python"
+    data: [
+        {title: "Variables", chapter: 1, section: 4,},
+    ]
+}
+
+
+
