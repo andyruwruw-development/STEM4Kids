@@ -69,6 +69,11 @@ export default new Vuex.Store({
     async getCourse(context, payload) {
     },
 
+    async bullshit() {
+      let response = await axios.get("/student/courses");
+      console.log(response);
+    },
+
 
 
 
