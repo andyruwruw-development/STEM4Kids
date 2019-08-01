@@ -1,13 +1,17 @@
 <template>
   <div class="courseview">
-    <h1>{{course.name}}</h1>
-    <div id="list">
-        <div v-for="chapter in course.list" v-bind:key="chapter.name" @click="openChapter(chapter.index)" class="chapter-div">
-            <div class="chapter">
-                <h1>{{chapter.title}}</h1>
+    <div id="course-name-div">
+      <h1 id="course-name">{{course.name}}</h1>
+
+    </div>
+    <div id="course-list">
+        <div v-for="chapter in course.list" v-bind:key="chapter.name" class="chapter-div">
+            <div @click="openChapter(chapter.index)" class="chapter-title-div flex flex-vert-cent">
+              <div class="chapter-image" v-bind:class="{active : chapter.active, inactive : !chapter.active}"/>
+              <h1 class="chapter-title">{{chapter.title}}</h1>
             </div>
             <div v-if="chapter.open" class="chapter-items-div">
-                <div @click="selectLink(item.type, item.path)" v-for="item in chapter.list" v-bind:key="item.name" class="item">
+                <div @click="selectLink(item.type, item.path)" v-for="item in chapter.list" v-bind:key="item.name" class="chapter-item">
                     <h1>{{item.name}}</h1>
                 </div>
             </div>
@@ -40,6 +44,7 @@ export default {
             list: [
                 {
                     title: "For-Loops",
+                    active: true,
                     open: false,
                     list: [
                         {
@@ -65,14 +70,84 @@ export default {
 </script>
 
 <style scoped>
+.courseview {
+  display: block;
+  width: 90vw;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+#course-name
+{
+  display: block;
+  font-size: 1.5em;
+  color: grey;
+  text-align: left;
+  font-weight: lighter;
+  margin: 0px;
+}
+
+#course-name-div
+{
+  display: flex;
+  padding: 20px;
+  background-color: white;
+  margin-top: 30px;
+}
+
 h1 {
-
+  display: block;
+  margin: 0px;
 }
-.chapter {
-    cursor: pointer;
+</style>
+
+<style scoped>
+.chapter-title-div {
+  cursor: pointer;
+  margin-top: 20px;
+  height: 50px;
+  padding: 20px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  box-shadow: 3px 3px 3px rgba(12, 12, 12, 0.13);
+  border: 2px solid rgba(255, 255, 255, 0);
+  transition: all .2s ease;
 }
 
-.item {
+.chapter-title-div:hover {
+  border: 2px solid rgba(98, 179, 255, 0.925);
+}
+
+.chapter-image
+{
+  display: block;
+  background-size: 130% 130%;
+  background-position: -6px -6px;
+  border-radius: 200px;
+  border: 2px solid rgba(128, 128, 128, 0.411);
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.chapter-title {
+  font-size: 1.3em;
+  font-weight: normal;
+  color: rgba(32, 43, 63, 0.842);
+}
+
+.active {
+  background-image: url("../../assets/Curriculum/Chapter/chapter-active.png");
+}
+
+.inactive {
+  background-image: url("../../assets/Curriculum/Chapter/chapter-inactive.png");
+}
+</style>
+
+<style scoped>
+
+.chapter-item {
     cursor: pointer;
 }
 </style>
