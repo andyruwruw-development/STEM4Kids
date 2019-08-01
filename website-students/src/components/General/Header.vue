@@ -53,8 +53,6 @@ export default {
     },
     async pathPush(path, index) {
       if (index != this.path.length - 1) {
-        let payload = {index: index};
-        await this.$store.dispatch("splicePath", payload);
         this.$router.push(path);
       }
     },

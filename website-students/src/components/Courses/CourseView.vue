@@ -7,8 +7,10 @@
     <div id="course-list">
         <div v-for="chapter in course.list" v-bind:key="chapter.name" class="chapter-div">
             <div @click="openChapter(chapter.index)" class="chapter-title-div flex flex-vert-cent">
-              <div class="chapter-image" v-bind:class="{active : chapter.active, inactive : !chapter.active}"/>
-              <h1 class="chapter-title">{{chapter.title}}</h1>
+              <div class="chapter-image" v-bind:class="{active : chapter.active, inactive : !chapter.active}"><div v-if="chapter.active" class="tooltip">Enabled</div></div>
+              <div class="chapter-title-main-div">
+                <h1 class="chapter-title">{{chapter.title}}</h1>
+              </div>
             </div>
             <div v-if="chapter.open" class="chapter-items-div">
                 <div @click="selectLink(item.type, item.path)" v-for="item in chapter.list" v-bind:key="item.name" class="chapter-item">
@@ -105,8 +107,8 @@ h1 {
 .chapter-title-div {
   cursor: pointer;
   margin-top: 20px;
-  height: 50px;
-  padding: 20px;
+  height: 80px;
+  padding: 5px;
   background-color: rgb(255, 255, 255);
   border-radius: 10px;
   box-shadow: 3px 3px 3px rgba(12, 12, 12, 0.13);
@@ -127,13 +129,39 @@ h1 {
   border: 2px solid rgba(128, 128, 128, 0.411);
   width: 40px;
   height: 40px;
-  margin-right: 10px;
+  margin: 15px;
+  position: relative;
+}
+
+.tooltip {
+  position: absolute;
+  display: block;
+  padding: 5px;
+  color: rgba(23, 162, 255, 0.623);
+  margin-left: auto;
+  margin-right: auto;
+  left: -11px;
+  bottom: -23px;
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-weight: bolder;
+  font-size: .7em;
+  opacity: 0;
+  transition: all .3s ease;
+}
+
+.chapter-image:hover .tooltip {
+  opacity: 1;
 }
 
 .chapter-title {
   font-size: 1.3em;
   font-weight: normal;
   color: rgba(32, 43, 63, 0.842);
+}
+
+.chapter-title-main-div {
+  display: block;
 }
 
 .active {
