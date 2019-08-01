@@ -11,11 +11,11 @@ client = MongoClient()
 db = client.student
 
 def createStudentObj(form):
-    #access permission: admin, staff, parent
     first_name = form.first_name.data
     last_name = form.last_name.data
     username =  form.username.data
     password = form.password.data
+
 
 
     db.student.insert_one({
@@ -26,7 +26,11 @@ def createStudentObj(form):
             "location" : "",
             "username" : "",
             "password" : "" ,#store hashpassword in db
-            "parent" : "",#objID
+            "parent" : {
+                "$db" : "db",
+                "$ref" : "curriculum",
+                "$id" : ObjectId("")
+            },
             "contact_info" : {[ 
                 #parent contact info list
                 #insert only one parent contact info
@@ -36,19 +40,20 @@ def createStudentObj(form):
                 #append from addEmergencyContact and updateEmergencyContact
 
             ]},
-            "courses" :{[
+            "registered_courses" : {[
                 #list of student course data & progress
                 { 
-                    "course" : "5d3ab004385e47c13d66e4c9", 
-                    #id to random course in curriculum, 
-                    "course_progress" : 0, 
-                    "chapters_progres" : [],
-                    "lessons_progress" : []
+                    "$db" : "db",
+                    "$ref" : "curriculum",
+                    "$id" : ObjectId("....."),
+                    "course_progress" : 0.0
                 }
             ]}
         }
     })
     return
+
+
 
 def addEmergencyContacts(form):
     first_name = form.first_name.data
@@ -92,4 +97,5 @@ def viewStudentCourse():
 
     return jsonify({"student course" : output})
 
-
+if __name__ == "__main__":
+    app.run(debug=True)
