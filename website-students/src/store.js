@@ -70,7 +70,7 @@ export default new Vuex.Store({
     },
 
     async bullshit() {
-      let response = await axios.get("/student/courses");
+      let response = await axios.get("/api/hi");
       console.log(response);
     },
 

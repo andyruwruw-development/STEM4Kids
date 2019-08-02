@@ -2,7 +2,6 @@
   <div class="courseview">
     <div id="course-name-div">
       <h1 id="course-name">{{course.name}}</h1>
-
     </div>
     <div id="course-list">
         <div v-for="chapter in course.list" v-bind:key="chapter.name" class="chapter-div">
@@ -60,7 +59,6 @@ export default {
     },
   },
   created() {
-      console.log(this.courseData);
       this.course = this.courseData;
       for (var i = 0; i < this.course.list.length; i++)
       {

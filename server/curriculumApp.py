@@ -38,7 +38,7 @@ def createLesson(form):
     
 def main():
     db.lessons.delete_many({})
-    db.lessons.insert_many(
+    db.lessons.insert_many([
         {
             "course" : "Python",
             "chapter_number" : 1,
@@ -86,7 +86,7 @@ def main():
             "section" : 2,
             "section_title" : "Random Section Title3",
             "data"  : []  #lesson content
-        }
+        }]
     )
     return
 

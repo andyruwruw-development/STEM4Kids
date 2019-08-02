@@ -2,13 +2,21 @@
   <div class="courselistcomp">
     <h1>Active Courses</h1>
     <div id="courselist-div">
-      <div id="courses">
+      <div v-if="list != null" id="courses">
         <div v-bind:class="{enabled : course.enabled}"
         @click="selectCourse(course.name)" v-for="course in list" v-bind:key="course.name" class="indianred course">
           <p>{{course.name}}</p>
         </div>
       </div>
+      <div v-else id="courses">
+        <div id="empty-1" class="empty course"></div>
+        <div id="empty-2" class="empty course"></div>
+        <div id="empty-3" class="empty course"></div>
+        <div id="empty-4" class="empty course"></div>
+      </div>
+      <button @click="loadmaybe">simulate loading</button>
     </div>
+    
   </div>
 </template>
 
@@ -17,7 +25,7 @@ export default {
   name: 'courselistcomp',
   data() {
       return {
-
+        loaded: false,
       }
   },
   methods: {
@@ -28,9 +36,15 @@ export default {
       await this.$store.dispatch("getCourse", payload);
       this.$router.push("/course/" + coursename);
     },
+    loadmaybe() {
+      this.loaded = !this.loaded;
+    }
   },
   computed: {
     list() {
+      if (!this.loaded) {
+        return null;
+      }
       return this.$store.state.profile.courses;
     },
   },
@@ -68,7 +82,7 @@ export default {
   transition: all .2s ease;
 }
 
-.course:hover {
+.course:hover:not(.empty) {
   transform: translateX(-2px) translateY(-2px);
   box-shadow: 8px 8px 8px rgba(2, 2, 2, 0.425);
 }
@@ -92,6 +106,45 @@ h1 {
 </style>
 
 <style scoped>
+
+@keyframes strobe {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+#empty-1
+{
+  animation-delay: 0s;
+}
+#empty-2
+{
+  animation-delay: .75s;
+}
+#empty-3
+{
+  animation-delay: 1.5s;
+}
+#empty-4
+{
+  animation-delay: 2.25s;
+}
+
+.empty {
+  animation: strobe 3s ease 0s infinite;
+  background-image: url("../../assets/Curriculum/empty.png");
+  background-size: 250% auto;
+  background-position: -220px -50px;
+  filter: invert(80%);
+  opacity: 0;
+}
+
 .indianred {
   background-color: rgba(255, 71, 71, 0.982);
 }

@@ -27,6 +27,7 @@ export default {
     CourseList
   },
   async created() {
+    await this.$store.dispatch("bullshit");
     await this.$store.dispatch("pathReset");
     let payload = {path: {name: "Courses", path: "/"}}
     await this.$store.dispatch("pathPush", payload);
