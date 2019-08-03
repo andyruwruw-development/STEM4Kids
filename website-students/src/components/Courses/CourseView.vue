@@ -4,16 +4,23 @@
       <h1 id="course-name">{{course.name}}</h1>
     </div>
     <div id="course-list">
-        <div v-for="chapter in course.list" v-bind:key="chapter.name" class="chapter-div">
+        <div v-for="chapter in courseData.list" v-bind:key="chapter.name" class="chapter-div">
             <div @click="openChapter(chapter.index)" class="chapter-title-div flex flex-vert-cent">
               <div class="chapter-image" v-bind:class="{active : chapter.active, inactive : !chapter.active}"><div v-if="chapter.active" class="tooltip">Enabled</div></div>
               <div class="chapter-title-main-div">
-                <h1 class="chapter-title">{{chapter.title}}</h1>
+                <h1 class="chapter-title">Chapter {{chapter.index + 1}}: {{chapter.title}}</h1>
               </div>
             </div>
             <div v-if="chapter.open" class="chapter-items-div">
-                <div @click="selectLink(item.type, item.path)" v-for="item in chapter.list" v-bind:key="item.name" class="chapter-item">
-                    <h1>{{item.name}}</h1>
+                <div @click="selectLink(item.type, item.path)" v-for="item in chapter.list" v-bind:key="item.name" class="chapter-item flex flex-vert-cent">
+                  <div class="chapter-item-image" v-bind:class="{active : chapter.active, inactive : !chapter.active, quizimage : item.type == 'quiz', exerciseimage : item.type == 'exercise', lessonimage : item.type == 'lesson'}"><div v-if="item.active" class="tooltip">Enabled</div></div>
+                  <div class="flex">
+                    <h1 class="chapter-item-title chapter-item-section" v-if="item.type == 'lesson'">{{chapter.index + 1}}.{{item.section}}</h1>
+                    <h1 class="chapter-item-title chapter-item-section" v-if="item.type == 'quiz'">Quiz:</h1>
+                    <h1 class="chapter-item-title chapter-item-section" v-if="item.type == 'exercise'">Exercise:</h1>
+                    <h1 class="chapter-item-title">{{item.title}}</h1>
+                  </div>
+                  
                 </div>
             </div>
         </div>
@@ -35,27 +42,109 @@ export default {
 
     },
     openChapter(index) {
-        this.course.list[index].open = !this.course.list[index].open;
+      console.log(this.course.list[index].open)
+      this.course.list[index].open = !this.course.list[index].open;
     }
   },
   computed: {
     courseData() {
-        return {
-            name: "Introduction to Python",
+      return {
+        name: "Introduction to Python",
+        list: 
+        [
+          {
+            title: "Loops",
+            index: 0,
+            active: true,
+            open: false,
             list: [
-                {
-                    title: "For-Loops",
-                    active: true,
-                    open: false,
-                    list: [
-                        {
-                            name: "Intro to Loops"
-                        }
-                    ]
-                }
-            ],
-        }
-      //return this.$store.state.profile.courses;
+              {
+                title: "Intro to Loops",
+                course: "Introduction to Python",
+                chapter: "Loops",
+                section: 1,
+                active: true,
+                type: "lesson",
+              },
+              {
+                title: "While Loops",
+                course: "Introduction to Python",
+                chapter: "Loops",
+                section: 2,
+                active: true,
+                type: "quiz",
+              },
+              {
+                title: "For Loops",
+                course: "Introduction to Python",
+                chapter: "Loops",
+                section: 3,
+                active: true,
+                type: "exercise",
+              }
+            ]
+          },
+          {
+            title: "Loops",
+            index: 0,
+            active: false,
+            open: false,
+            list: [
+              {
+                title: "Intro to Loops",
+                course: "Introduction to Python",
+                chapter: "Loops",
+                section: 1,
+                active: false,
+                type: "quiz",
+              },
+              {
+                title: "While Loops",
+                course: "Introduction to Python",
+                chapter: "Loops",
+                section: 2,
+                active: false,
+                type: "lesson",
+              },
+              {
+                title: "For Loops",
+                course: "Introduction to Python",
+                chapter: "Loops",
+                section: 3,
+                active: false,
+                type: "exercise",
+              }
+            ]
+          },
+          {
+            title: "Loops",
+            index: 0,
+            active: false,
+            open: false,
+            list: [
+              {
+                title: "Intro to Loops",
+                course: "Introduction to Python",
+                chapter: "Loops",
+                section: 1,
+              },
+              {
+                title: "While Loops",
+                course: "Introduction to Python",
+                chapter: "Loops",
+                section: 2,
+              },
+              {
+                title: "For Loops",
+                course: "Introduction to Python",
+                chapter: "Loops",
+                section: 3,
+              }
+            ]
+          }
+        ],
+      }
+    //return this.$store.state.profile.courses;
     },
   },
   created() {
@@ -70,6 +159,7 @@ export default {
 </script>
 
 <style scoped>
+/* Course Details */
 .courseview {
   display: block;
   width: 90vw;
@@ -91,7 +181,7 @@ export default {
 {
   display: flex;
   padding: 20px;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0);
   margin-top: 30px;
 }
 
@@ -102,6 +192,7 @@ h1 {
 </style>
 
 <style scoped>
+/* Chapter Style */
 .chapter-title-div {
   cursor: pointer;
   margin-top: 20px;
@@ -162,23 +253,97 @@ h1 {
   display: block;
 }
 
-.active {
+.chapter-image.active {
   background-image: url("../../assets/Curriculum/Chapter/chapter-active.png");
 }
 
-.inactive {
+.chapter-image.inactive {
   background-image: url("../../assets/Curriculum/Chapter/chapter-inactive.png");
 }
 </style>
 
 <style scoped>
-
+/* Course Items */
 .chapter-item {
     cursor: pointer;
+    margin: 0 auto;
+    margin-top: 5px;
+    height: 60px;
+    padding: 5px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    box-shadow: 3px 3px 3px rgba(12, 12, 12, 0.13);
+    border: 2px solid rgba(255, 255, 255, 0);
+    transition: all .2s ease;
+
+    width: 95%;
 }
+
+.chapter-item:hover {
+  border: 2px solid rgba(98, 179, 255, 0.925);
+}
+
+.chapter-item-title {
+  font-size: 1.3em;
+  font-weight: normal;
+  color: rgba(32, 43, 63, 0.842);
+}
+
+.chapter-item-section {
+  margin-right: 10px;
+}
+
+.chapter-item:hover .chapter-item-title {
+  color: rgba(66, 132, 255, 0.945);
+}
+
+.chapter-item-image {
+  display: block;
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 30px;
+  margin: 15px;
+  margin-right: 10px;
+  position: relative;
+  transition: all .2s ease;
+}
+
+.chapter-item:hover .chapter-item-image.active {
+  transform: scale(1.1, 1.1);
+}
+
+.lessonimage.active {
+  background-image: url("../../assets/Curriculum/Lesson/lesson-purple.png");
+} 
+
+.lessonimage.inactive {
+  background-image: url("../../assets/Curriculum/Lesson/lesson-grey.png");
+} 
+
+.exerciseimage.active {
+  background-image: url("../../assets/Curriculum/Exercise/exercise-orange.png");
+} 
+
+.exerciseimage.inactive {
+  background-image: url("../../assets/Curriculum/Exercise/exercise-grey.png");
+} 
+
+.quizimage.active {
+  background-image: url("../../assets/Curriculum/Quiz/quiz-green.png");
+} 
+
+.quizimage.inactive {
+  background-image: url("../../assets/Curriculum/Quiz/quiz-grey.png");
+} 
+
+
+
 </style>
 
 <style scoped>
+/* Colors */
 .indianred {
   background-color: rgba(255, 71, 71, 0.982);
 }

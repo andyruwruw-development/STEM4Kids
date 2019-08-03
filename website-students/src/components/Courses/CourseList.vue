@@ -80,6 +80,7 @@ export default {
   font-weight: bolder;
 
   transition: all .2s ease;
+  animation: fade .5s ease;
 }
 
 .course:hover:not(.empty) {
@@ -107,6 +108,17 @@ h1 {
 
 <style scoped>
 
+@keyframes fade {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
 @keyframes strobe {
   0% {
     opacity: 0;
@@ -125,19 +137,19 @@ h1 {
 }
 #empty-2
 {
-  animation-delay: .75s;
+  animation-delay: .5s;
 }
 #empty-3
 {
-  animation-delay: 1.5s;
+  animation-delay: 1s;
 }
 #empty-4
 {
-  animation-delay: 2.25s;
+  animation-delay: 1.5s;
 }
 
 .empty {
-  animation: strobe 3s ease 0s infinite;
+  animation: strobe 2s ease 0s infinite;
   background-image: url("../../assets/Curriculum/empty.png");
   background-size: 250% auto;
   background-position: -220px -50px;
