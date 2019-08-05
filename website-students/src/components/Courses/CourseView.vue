@@ -11,8 +11,9 @@
                 <h1 class="chapter-title">Chapter {{chapter.index + 1}}: {{chapter.title}}</h1>
               </div>
             </div>
-            <div v-if="chapter.open" class="chapter-items-div">
-                <div @click="selectLink(item.type, item.path)" v-for="item in chapter.list" v-bind:key="item.name" class="chapter-item flex flex-vert-cent">
+            <transition name="bounce">
+              <div v-if="chapter.open" class="chapter-items-div">
+                <div @click="selectLink(item.type, item.path)" v-for="item in chapter.list" v-bind:key="item.section" class="chapter-item flex flex-vert-cent">
                   <div class="chapter-item-image" v-bind:class="{active : chapter.active, inactive : !chapter.active, quizimage : item.type == 'quiz', exerciseimage : item.type == 'exercise', lessonimage : item.type == 'lesson'}"><div v-if="item.active" class="tooltip">Enabled</div></div>
                   <div class="flex">
                     <h1 class="chapter-item-title chapter-item-section" v-if="item.type == 'lesson'">{{chapter.index + 1}}.{{item.section}}</h1>
@@ -22,7 +23,8 @@
                   </div>
                   
                 </div>
-            </div>
+              </div>
+            </transition>
         </div>
     </div>
 
@@ -35,6 +37,7 @@ export default {
   data() {
       return {
           course: null,
+          open: -1,
       }
   },
   methods: {
@@ -42,8 +45,18 @@ export default {
 
     },
     openChapter(index) {
-      console.log(this.course.list[index].open)
       this.course.list[index].open = !this.course.list[index].open;
+      if (this.open != index && this.open != -1) {
+        this.course.list[this.open].open = !this.course.list[this.open].open;
+      }
+      if (this.course.list[index].open)
+      {
+        this.open = index;
+      }
+      else {
+        this.open = -1;
+      }
+
     }
   },
   computed: {
@@ -337,6 +350,24 @@ h1 {
 .quizimage.inactive {
   background-image: url("../../assets/Curriculum/Quiz/quiz-grey.png");
 } 
+
+.bounce-enter-active {
+  animation: bounce-in .5s;
+}
+.bounce-leave-active {
+  animation: bounce-in .5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    overflow-y: hidden;
+    height: 0px;
+    transform: translateY(-100%);
+  }
+  100% {
+    overflow-y: hidden;
+    transform: translateY(0%);
+  }
+}
 
 
 
