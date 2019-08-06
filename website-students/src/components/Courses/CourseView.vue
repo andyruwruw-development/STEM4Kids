@@ -11,8 +11,7 @@
                 <h1 class="chapter-title">Chapter {{chapter.index + 1}}: {{chapter.title}}</h1>
               </div>
             </div>
-            <transition name="bounce">
-              <div v-if="chapter.open" class="chapter-items-div">
+              <div v-bind:class="{expand: chapter.open}" class="chapter-items-div">
                 <div @click="selectLink(item.type, item.path)" v-for="item in chapter.list" v-bind:key="item.section" class="chapter-item flex flex-vert-cent">
                   <div class="chapter-item-image" v-bind:class="{active : chapter.active, inactive : !chapter.active, quizimage : item.type == 'quiz', exerciseimage : item.type == 'exercise', lessonimage : item.type == 'lesson'}"><div v-if="item.active" class="tooltip">Enabled</div></div>
                   <div class="flex">
@@ -24,7 +23,6 @@
                   
                 </div>
               </div>
-            </transition>
         </div>
     </div>
 
@@ -44,11 +42,15 @@ export default {
     async selectLink(type, link) {
 
     },
-    openChapter(index) {
-      this.course.list[index].open = !this.course.list[index].open;
+    sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    },
+    async openChapter(index) {
       if (this.open != index && this.open != -1) {
         this.course.list[this.open].open = !this.course.list[this.open].open;
+        await this.sleep(200);
       }
+      this.course.list[index].open = !this.course.list[index].open;
       if (this.course.list[index].open)
       {
         this.open = index;
@@ -288,8 +290,6 @@ h1 {
     box-shadow: 3px 3px 3px rgba(12, 12, 12, 0.13);
     border: 2px solid rgba(255, 255, 255, 0);
     transition: all .2s ease;
-
-    width: 95%;
 }
 
 .chapter-item:hover {
@@ -351,25 +351,18 @@ h1 {
   background-image: url("../../assets/Curriculum/Quiz/quiz-grey.png");
 } 
 
-.bounce-enter-active {
-  animation: bounce-in .5s;
-}
-.bounce-leave-active {
-  animation: bounce-in .5s reverse;
-}
-@keyframes bounce-in {
-  0% {
-    overflow-y: hidden;
-    height: 0px;
-    transform: translateY(-100%);
-  }
-  100% {
-    overflow-y: hidden;
-    transform: translateY(0%);
-  }
+.chapter-items-div {
+  display: block;
+  overflow: hidden;
+  height: auto;
+  max-height: 0px;
+  transition: all .2s ease;
 }
 
-
+.expand {
+  max-height: calc(100vh);
+  transition: all .3s ease;
+}
 
 </style>
 
