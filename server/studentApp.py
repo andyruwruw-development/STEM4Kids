@@ -29,7 +29,7 @@ def createStudentObj(form):
             "parent" : {
                 "$db" : "db",
                 "$ref" : "curriculum",
-                "$id" : ObjectId("")
+                #"$id" : ObjectId("")
             },
             "contact_info" : {[ 
                 #parent contact info list

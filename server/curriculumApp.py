@@ -5,6 +5,7 @@ from classes import CreateCourse
 import hashlib, binascii, os
 from pprint import pprint
 #import datetime
+import operator
 
 
 #config
@@ -38,61 +39,121 @@ def createLesson(form):
     
 def main():
     db.lessons.delete_many({})
-    db.lessons.insert_many(
+    db.lessons.insert_many([
         {
+            "type" : "quiz",
+            "index" : 0,
             "course" : "Python",
+            "compiler" : None,
+            "course_progress" : 0.0,
             "chapter_number" : 1,
             "chapter_title" : "Variables",
-            "section" : 1,
+            "section_number" : 1,
             "section_title" : "Random Section Title1",
-            "data"  : []  #lesson content
+            "data"  : []  # content
         },
         {
+            "type" : "quiz",
+            "index" : 0,
             "course" : "Python",
-            "chapter_number" : 1,
-            "chapter_title" : "Variables",
-            "section" : 2,
+            "compiler" : None,
+            "course_progress" : 0.0,
+            "chapter_number" : 2,
+            "chapter_title" : "Variables2",
+            "section_number" : 2,
             "section_title" : "Random Section Title2",
-            "data"  : []  #lesson content
+            "data"  : []  # content
         },
         {
+            "type" : "quiz",
+            "index" : 0,
             "course" : "Python",
-            "chapter_number" : 1,
-            "chapter_title" : "Variables",
-            "section" : 2,
-            "section_title" : "Random Section Title2",
-            "data"  : []  #lesson content
-        },
-        {
-            "course" : "Java",
-            "chapter_number" : 1,
-            "chapter_title" : "Introduction to Java",
-            "section" : 2,
-            "section_title" : "Random Section Title1",
-            "data"  : []  #lesson content
-        },
-        {
-            "course" : "Java",
-            "chapter_number" : 1,
-            "chapter_title" : "Introduction to Java",
-            "section" : 2,
-            "section_title" : "Random Section Title2",
-            "data"  : []  #lesson content
-        },
-        {
-            "course" : "Java",
-            "chapter_number" : 1,
-            "chapter_title" : "Introduction to Java",
-            "section" : 2,
+            "compiler" : None,
+            "course_progress" : 0.0,
+            "chapter_number" : 3,
+            "chapter_title" : "Variables3",
+            "section_number" : 3,
             "section_title" : "Random Section Title3",
-            "data"  : []  #lesson content
+            "data"  : []  # content
+        },
+        {
+            "type" : "quiz",
+            "index" : 0,
+            "course" : "Java",
+            "compiler" : None,
+            "course_progress" : 0.0,
+            "chapter_number" : 1,
+            "chapter_title" : "Introduction to Java",
+            "section_number" : 2,
+            "section_title" : "Random Section Title1",
+            "data"  : []  # content
+        },
+        {
+            "type" : "quiz",
+            "index" : 0,
+            "course" : "Java",
+            "compiler" : None,
+            "course_progress" : 0.0,
+            "chapter_number" : 2,
+            "chapter_title" : "Introduction to Java",
+            "section_number" : 2,
+            "index": 2,
+            "section_title" : "Random Section Title2",
+            "data"  : []  # content
+        },
+        {
+            "type" : "quiz",
+            "index" : 0,
+            "course" : "Java",
+            "compiler" : None,
+            "course_progress" : 0.0,
+            "chapter_number" : 3,
+            "chapter_title" : "Introduction to Java",
+            "section_number" : 3,
+            "section_title" : "Random Section Title3",
+            "data"  : []  # content
         }
-    )
-    return
+    ])
 
+    return
 main()
 
-@app.route("/student/courses", methods = ['GET'])
+
+@app.route("/api/courses/<course>", methods = ['GET'])
+def getCourseList(course):
+    output = {
+        "chapterList" : []
+    }
+    
+    cursor = db.lessons.find({"course" : course})
+    if cursor :
+        for document in cursor: 
+            output["course"] = document["course"]
+            output["compiler"] = document["compiler"]
+            output["chapterList"].insert(0,{
+                "chapterNumber" : document["chapter_number"],
+                "chapterTitle" : document["chapter_title"],
+                "data" : []
+            })
+            chapterCursor =  db.lessons.find( { "$and" : [{"course" : course},{"chapter_number" : output["chapterList"][0]["chapterNumber"] }]})
+            if chapterCursor:
+                for doc in chapterCursor:
+                    if len(output["chapterList"][0]["data"]) == 0:
+                        output["chapterList"][0]["data"].insert(0,{
+                            "type" : doc["type"],
+                            "course" : doc["course"],
+                            "chapterNumber" : doc["chapter_number"],
+                            "chapterTitle" : doc["chapter_title"],
+                            "sectionNumber" : doc["section_number"],
+                            "sectionTitle" : doc["section_title"]
+                        })
+                    elif output["chapterList"][0]["data"][1]["sectionNumber"] == output["chapterList"][0]["data"][0]["sectionNumber"]:
+                        break
+            
+    return output
+
+    
+@app.route("/api/student/courses", methods = ['GET'])
 def courses():
     cursor = db.lessons.find()
     if cursor : 
@@ -101,26 +162,31 @@ def courses():
             if cursor :
                 course = {
                     "course_name" : document["course"],
-                    "course_color" : document["course_color"],
-                    "course_progress" : document["course_progress"],
-                    "course_exp_date" : document["course_exp_date"]
+                    "course_color" : document["course_color"]
+                    #"course_progress" : document["course_progress"],
+                    #"course_exp_date" : document["course_exp_date"]
+                
                 }
                 output.append(course)
     else : 
         output = "no data in lessons collection"
+    return output
 
-    return jsonify({"result" : output})
+@app.route("/students/lessons/<course>/<chapter>/<section>", methods = ['GET'])
+def notSureWhatThisDoes():
+    return 
 
-@app.route("/student/courses/<course>", methods = ['GET'])
-def oneCourse():
-    cursor = db.lessons.find({"course" : "Python"})
-    if cursor :
-        for document in cursor:
-            output = {
-                "course_name" : document["course"],
-                "course_color" : document["course_color"],
-                "course_progress" : document["course_progress"],
-                "course_exp_date" : document["course_exp_date"]
-            }
-    output  = "No course Python in lessons collection"
-    return jsonify({"result" : output})
+@app.route("student/quiz/<course>/<chapter>/<section>", methods = ['GET'])
+def dontKnowWhatThisDoes():
+    return
+
+@app.route("students/profile", methods = ['GET'])
+def studentProfile():
+    return
+
+@app.route("student/xp", methods = ['PUT'])
+def addStudentXP():
+    return
+
+if __name__ == "__main__":
+    app.run(debug=True)
