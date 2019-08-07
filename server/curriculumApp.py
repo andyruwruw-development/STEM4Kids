@@ -111,9 +111,16 @@ def main():
             "chapter_title" : "Introduction to Java",
             "section_number" : 3,
             "section_title" : "Random Section Title3",
+<<<<<<< HEAD
             "data"  : []  # content
         }
     ])
+=======
+            "data"  : []  #lesson content
+        }]
+    )
+    return
+>>>>>>> 3ccc43e4bb39e00462aa3c4f7f94baf68e743edd
 
     return
 main()
