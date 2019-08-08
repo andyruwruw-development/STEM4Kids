@@ -1,6 +1,5 @@
 from flask import Flask, render_template, redirect, request, url_for, jsonify
 from pymongo import MongoClient
-from classes import CreateStaff, UpdateStaff
 import hashlib, binascii, os
 from pprint import pprint
 
