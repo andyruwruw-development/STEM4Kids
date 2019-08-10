@@ -12,6 +12,11 @@ client = MongoClient()
 db = client.db
 bcrypt = Bcrypt()
 mail = Mail()
+login_manager = LoginManager()
+login_manager.login_view = 'user.login'
+login_manager.login_message_category = 'info'
+login_manager.session_protection = 'strong'
+
 
 
 def create_app(config_class=Config):
@@ -19,6 +24,9 @@ def create_app(config_class=Config):
     app.config.from_object(Config)
 
     db.init_app(app)
+    bcrypt.init_app(app)
+    login_manager.init_app(app)
+    mail.init_app(app)
 
     from server.users.staff.routes import staff
     from server.users.students.routes import student

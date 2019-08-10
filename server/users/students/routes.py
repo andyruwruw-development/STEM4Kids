@@ -2,11 +2,11 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 
 from server import db, bcrypt
-# from server.users.students.forms import 
-from server.users.student.forms import LoginForm
-#from server.users.students.utils import save_picture
+from server.users.students.forms import LoginForm, UpdateAccountForm, RegistrationForm, RequestResetForm, ResetPasswordForm
+from server.users.students.utils import savePicture, sendResetEmail
 from flask_login import current_user, login_required
 
+from server.models import User
 
 student =  Blueprint('student', __name__)
 
@@ -91,7 +91,7 @@ def resetPasswordRequest():
         user = db.student.find_one({"username" : form.username.data})
         sendResetEmail(user)
         flash('An email has been sent with instructions to reset your password', 'info')
-        return redirect(url_for('/student/login'))
+        return redirect(url_for('user.login'))
     return render_template('resetRequest.html', title = "Reset Password", form = form)
 
 
@@ -107,12 +107,12 @@ def resetToken(token):
     if form.validate_on_submit():
         hashedPassword = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user.password = hashedPassword
-        # db.student.save({})
         # db.student.update_one({})
-        # db.session.commit()
-    
+        # filter by student_id, update password 
+        
         flash('Your password has been updated! You are now able to login', 'success')
-        return redirect(url_for('ResetToken.html', title = "Reset Password", form = form))
+        return redirect(url_for('user.login'))
+    return redirect(url_for('ResetToken.html', title = "Reset Password", form = form))
 
 @student.route("/students/lessons/<course>/<chapter>/<section>", methods = ['GET'])
 def notSureWhatThisDoes():
