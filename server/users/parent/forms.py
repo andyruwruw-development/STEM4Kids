@@ -7,38 +7,34 @@ from server import users, db
 from server.users.students.models import StudentUser
 import random
 
-class RegistrationForm(FlaskForm):
-    # profile information
-    userID =  randomID()
-    username = StringField('Username', validators = [DataRequired(), Length(min = 3, max = 10)])
+class parentRegistrationForm(FlaskForm):
+
+    firstName = StringField('First Name', validators = [DataRequired()])
+    lastName = StringField('Last Name', validators= [DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
     confirmPassword = PasswordField('Confirm Password', validators = [DataRequired(), EqualTo('password')])
     
     # contact information 
-    firstName = StringField('First Name', validators = [DataRequired()])
-    lastName = StringField('Last Name', validators= [DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    
-    
+    phone = StringField('Phone Number', validators=[DataRequired()])
+
     submit = SubmitField('Sign Up')
 
-    def validateUserName(self, username):
-        user = db.students.find_one({"username" : username})
-        if user : 
-            raise ValidationError('That username is taken. Please choose a different one.')
     def validateEmail(self, email) :
         user = db.students.find_one({"email" : email})
         if user:
             raise ValidationError("That email is taken. Please choose a different one.")
+    def validatePhone(self, phone) :
+        if ____:
+            raise ValidationError("Phone number is not valid")
 
-    def randomID(self):
-        id = random.randint(10000,20000)
-        while True:
-            user = db.students.find_one({"userID" : id})
-            if user:
-                id = random.randint(10000,20000)
-            else :
-                return id
+
+class studentRegistrationForm(FlaskForm):
+    firstName = StringField('First Name', validators = [DataRequired()])
+    lastName = StringField('Last Name', validators= [DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Login')
+
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators = [DataRequired()])

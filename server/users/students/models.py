@@ -12,15 +12,18 @@ def load_user(userID):
 
 
 # student mapping document PUT IN STUDENT FILE
-class User(mongoengine.Document,UserMixin):
+class StudentUser(mongoengine.Document,UserMixin):
     meta = {'collection' : 'students'} 
-    # profile information
+
+    # profile information -- server/users/students/forms.py
+    #                     -- server/users/students/routes.py (createProfile)
     userID = mongoengine.StringField(required = True)
     username = mongoengine.StringField(required =  True)
     password = mongoengine.StringField(required = True)
     imageFile = mongoengine.ImageField()
 
-    # contact information
+    # contact information -- server/users/parents/forms.py
+    #                     -- server/users/parents/routes.py (register)
     firstName = mongoengine.StringField(required = True)
     lastName = mongoengine.StringField(required = True)
     email = mongoengine.EmailField()
@@ -45,7 +48,7 @@ class User(mongoengine.Document,UserMixin):
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.imageFile}')"
         
-
+# called when the parent createst the 
 class EmergencyContacts(mongoengine.EmbeddedDocument):
     firstName = mongoengine.StringField(required = True)
     lastName = mongoengine.StringField(required = True)

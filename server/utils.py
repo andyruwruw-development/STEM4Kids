@@ -6,6 +6,7 @@ import hashlib, binascii, os
 # hash & salt password
 
 
+
 def hash_password(password):
     """Hash a password for storing."""
     salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')

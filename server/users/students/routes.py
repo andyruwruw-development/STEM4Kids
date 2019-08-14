@@ -1,11 +1,9 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
-
 from server import db, bcrypt
 from server.users.students.forms import LoginForm, UpdateAccountForm, RegistrationForm, RequestResetForm, ResetPasswordForm
 from server.users.students.utils import savePicture, sendResetEmail
 from flask_login import current_user, login_required
-
 from server.models import User
 
 student =  Blueprint('student', __name__)
