@@ -10,6 +10,7 @@ export default new Vuex.Store({
       username: "andyruwruw",
       name: "Andrew Young"
     },
+
     profile: {
       level: 1,
       xp: 100,
@@ -21,8 +22,8 @@ export default new Vuex.Store({
 
     path: [],
 
+    courses: null,
     course: null,
-    list: [],
 
     lesson: null,
     exercise: null,
@@ -66,13 +67,35 @@ export default new Vuex.Store({
 
     },
 
+    async getCourses(context, payload) {
+      let response = await axios.get("/api/course/");
+      context.commit('setCourses', response.data);
+    },
     async getCourse(context, payload) {
+      let response = await axios.get("/api/course/" + payload.course + "/");
+      context.commit('setCourse', response.data);
+    },
+    async getLesson(context, payload) {
+      let response = await axios.get("/api/lesson/" + payload.course + "/" + payload.chapter + "/" + payload.section + "/");
+      context.commit('setLesson', response.data);
+    },
+    async getQuiz(context, payload) {
+      let response = await axios.get("/api/qui/" + payload.course + "/" + payload.chapter + "/" + payload.section + "/");
+      context.commit('setQuiz', response.data);
+    },
+    async getExercise(context, payload) {
+      let response = await axios.get("/api/exercise/" + payload.course + "/" + payload.chapter + "/" + payload.section + "/");
+      context.commit('setExercise', response.data);
     },
 
-    async bullshit() {
-      let response = await axios.get("/api/hi");
-      console.log(response);
+    async sendProgress(context, payload) {
+      let response = await axios.post("/api/progress/" + payload.course + "/" + payload.chapter + "/" + payload.section + "/");
+      if (response.data.xp) {
+        response = await axios.get("/api/profile/");
+        context.commit('setProfile', response.data);
+      }
     },
+
 
 
 

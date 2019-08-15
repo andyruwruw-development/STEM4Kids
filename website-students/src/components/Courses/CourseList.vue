@@ -34,7 +34,7 @@ export default {
         course: coursename,
       }
       await this.$store.dispatch("getCourse", payload);
-      this.$router.push("/course/" + coursename);
+      this.$router.push({name:'course',params:{course:coursename}})
     },
     loadmaybe() {
       this.loaded = !this.loaded;

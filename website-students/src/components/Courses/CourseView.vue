@@ -12,7 +12,7 @@
               </div>
             </div>
               <div v-bind:class="{expand: chapter.open}" class="chapter-items-div">
-                <div @click="selectLink(item.type, item.path)" v-for="item in chapter.list" v-bind:key="item.section" class="chapter-item flex flex-vert-cent">
+                <div @click="selectLink(item)" v-for="item in chapter.list" v-bind:key="item.section" class="chapter-item flex flex-vert-cent">
                   <div class="chapter-item-image" v-bind:class="{active : chapter.active, inactive : !chapter.active, quizimage : item.type == 'quiz', exerciseimage : item.type == 'exercise', lessonimage : item.type == 'lesson'}"><div v-if="item.active" class="tooltip">Enabled</div></div>
                   <div class="flex">
                     <h1 class="chapter-item-title chapter-item-section" v-if="item.type == 'lesson'">{{chapter.index + 1}}.{{item.section}}</h1>
@@ -39,8 +39,19 @@ export default {
       }
   },
   methods: {
-    async selectLink(type, link) {
-
+    async selectLink(item) {
+      if (item.type == "lesson") {
+        this.$router.push({name:'lesson',params:{course:item.course, chapter: item.chapter, section: item.section}})
+      }
+      else if (item.type == "quiz") {
+        this.$router.push({name:'quiz',params:{course:item.course, chapter: item.chapter, section: item.section}})
+      }
+      else if (item.type == "exercise") {
+        this.$router.push({name:'exercise',params:{course:item.course, chapter: item.chapter, section: item.section}})
+      }
+      else {
+        console.log("Invalid Type: Most likely an internal server issue.")
+      }
     },
     sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
@@ -259,7 +270,7 @@ h1 {
 }
 
 .chapter-title {
-  font-size: 1.3em;
+  font-size: 1.5em;
   font-weight: normal;
   color: rgba(32, 43, 63, 0.842);
 }
@@ -299,7 +310,7 @@ h1 {
 .chapter-item-title {
   font-size: 1.3em;
   font-weight: normal;
-  color: rgba(32, 43, 63, 0.842);
+  color: rgba(78, 84, 96, 0.842);
 }
 
 .chapter-item-section {
@@ -311,20 +322,24 @@ h1 {
 }
 
 .chapter-item-image {
+  
   display: block;
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
-  width: 30px;
-  height: 30px;
+  height: 50%;
+  width: 0;
+  padding-left: 30px;
   margin: 15px;
   margin-right: 10px;
   position: relative;
   transition: all .2s ease;
+  opacity: .8;
 }
 
 .chapter-item:hover .chapter-item-image.active {
   transform: scale(1.1, 1.1);
+  opacity: 1;
 }
 
 .lessonimage.active {
