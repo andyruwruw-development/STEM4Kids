@@ -1,10 +1,10 @@
 <template>
   <div class="courseview">
-    <div id="course-name-div">
+    <div v-if="course != null" id="course-name-div">
       <h1 id="course-name">{{course.name}}</h1>
     </div>
-    <div id="course-list">
-        <div v-for="chapter in courseData.list" v-bind:key="chapter.name" class="chapter-div">
+    <div v-if="course != null" id="course-list">
+        <div v-for="chapter in course.list" v-bind:key="chapter.name" class="chapter-div">
             <div @click="openChapter(chapter.index)" class="chapter-title-div flex flex-vert-cent">
               <div class="chapter-image" v-bind:class="{active : chapter.active, inactive : !chapter.active}"><div v-if="chapter.active" class="tooltip">Enabled</div></div>
               <div class="chapter-title-main-div">
@@ -12,7 +12,7 @@
               </div>
             </div>
               <div v-bind:class="{expand: chapter.open}" class="chapter-items-div">
-                <div @click="selectLink(item.type, item.path)" v-for="item in chapter.list" v-bind:key="item.section" class="chapter-item flex flex-vert-cent">
+                <div @click="selectLink(item)" v-for="item in chapter.list" v-bind:key="item.section" class="chapter-item flex flex-vert-cent">
                   <div class="chapter-item-image" v-bind:class="{active : chapter.active, inactive : !chapter.active, quizimage : item.type == 'quiz', exerciseimage : item.type == 'exercise', lessonimage : item.type == 'lesson'}"><div v-if="item.active" class="tooltip">Enabled</div></div>
                   <div class="flex">
                     <h1 class="chapter-item-title chapter-item-section" v-if="item.type == 'lesson'">{{chapter.index + 1}}.{{item.section}}</h1>
@@ -39,8 +39,19 @@ export default {
       }
   },
   methods: {
-    async selectLink(type, link) {
-
+    async selectLink(item) {
+      if (item.type == "lesson") {
+        this.$router.push({name:'lesson',params:{course:item.course, chapter: item.chapter, section: item.section}})
+      }
+      else if (item.type == "quiz") {
+        this.$router.push({name:'quiz',params:{course:item.course, chapter: item.chapter, section: item.section}})
+      }
+      else if (item.type == "exercise") {
+        this.$router.push({name:'exercise',params:{course:item.course, chapter: item.chapter, section: item.section}})
+      }
+      else {
+        console.log("Invalid Type: Most likely an internal server issue.")
+      }
     },
     sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
@@ -58,117 +69,22 @@ export default {
       else {
         this.open = -1;
       }
-
     }
   },
   computed: {
     courseData() {
-      return {
-        name: "Introduction to Python",
-        list: 
-        [
-          {
-            title: "Loops",
-            index: 0,
-            active: true,
-            open: false,
-            list: [
-              {
-                title: "Intro to Loops",
-                course: "Introduction to Python",
-                chapter: "Loops",
-                section: 1,
-                active: true,
-                type: "lesson",
-              },
-              {
-                title: "While Loops",
-                course: "Introduction to Python",
-                chapter: "Loops",
-                section: 2,
-                active: true,
-                type: "quiz",
-              },
-              {
-                title: "For Loops",
-                course: "Introduction to Python",
-                chapter: "Loops",
-                section: 3,
-                active: true,
-                type: "exercise",
-              }
-            ]
-          },
-          {
-            title: "Loops",
-            index: 0,
-            active: false,
-            open: false,
-            list: [
-              {
-                title: "Intro to Loops",
-                course: "Introduction to Python",
-                chapter: "Loops",
-                section: 1,
-                active: false,
-                type: "quiz",
-              },
-              {
-                title: "While Loops",
-                course: "Introduction to Python",
-                chapter: "Loops",
-                section: 2,
-                active: false,
-                type: "lesson",
-              },
-              {
-                title: "For Loops",
-                course: "Introduction to Python",
-                chapter: "Loops",
-                section: 3,
-                active: false,
-                type: "exercise",
-              }
-            ]
-          },
-          {
-            title: "Loops",
-            index: 0,
-            active: false,
-            open: false,
-            list: [
-              {
-                title: "Intro to Loops",
-                course: "Introduction to Python",
-                chapter: "Loops",
-                section: 1,
-              },
-              {
-                title: "While Loops",
-                course: "Introduction to Python",
-                chapter: "Loops",
-                section: 2,
-              },
-              {
-                title: "For Loops",
-                course: "Introduction to Python",
-                chapter: "Loops",
-                section: 3,
-              }
-            ]
-          }
-        ],
-      }
-    //return this.$store.state.profile.courses;
+      return this.$store.state.course;
     },
   },
-  created() {
-      this.course = this.courseData;
-      for (var i = 0; i < this.course.list.length; i++)
-      {
-          this.course.list[i].index = i;
-          this.course.list[i].open = false;
-      }
+  async created() {
+    let payload = {course: this.$route.params.course};
+    await this.$store.dispatch("getCourse", payload);
+    this.course = this.courseData;
+    for (var i = 0; i < this.course.list.length; i++)
+    {
+        this.course.list[i].index = i;
+        this.course.list[i].open = false;
+    }
   }
 }
 </script>
@@ -259,7 +175,7 @@ h1 {
 }
 
 .chapter-title {
-  font-size: 1.3em;
+  font-size: 1.5em;
   font-weight: normal;
   color: rgba(32, 43, 63, 0.842);
 }
@@ -281,9 +197,9 @@ h1 {
 /* Course Items */
 .chapter-item {
     cursor: pointer;
-    margin: 0 auto;
     margin-top: 5px;
     height: 60px;
+    width: 95%;
     padding: 5px;
     background-color: rgb(255, 255, 255);
     border-radius: 10px;
@@ -299,7 +215,7 @@ h1 {
 .chapter-item-title {
   font-size: 1.3em;
   font-weight: normal;
-  color: rgba(32, 43, 63, 0.842);
+  color: rgba(78, 84, 96, 0.842);
 }
 
 .chapter-item-section {
@@ -311,20 +227,24 @@ h1 {
 }
 
 .chapter-item-image {
+  
   display: block;
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
-  width: 30px;
-  height: 30px;
+  height: 50%;
+  width: 0;
+  padding-left: 30px;
   margin: 15px;
   margin-right: 10px;
   position: relative;
   transition: all .2s ease;
+  opacity: .8;
 }
 
 .chapter-item:hover .chapter-item-image.active {
   transform: scale(1.1, 1.1);
+  opacity: 1;
 }
 
 .lessonimage.active {
@@ -357,6 +277,7 @@ h1 {
   height: auto;
   max-height: 0px;
   transition: all .2s ease;
+  padding-bottom: 5px;
 }
 
 .expand {

@@ -33,8 +33,7 @@ export default {
       let payload = {
         course: coursename,
       }
-      await this.$store.dispatch("getCourse", payload);
-      this.$router.push("/course/" + coursename);
+      this.$router.push({name:'course',params:{course:coursename}})
     },
     loadmaybe() {
       this.loaded = !this.loaded;
@@ -48,8 +47,8 @@ export default {
       return this.$store.state.profile.courses;
     },
   },
-  created() {
-
+  async created() {
+    await this.$store.dispatch("getCourses");
   }
 }
 </script>

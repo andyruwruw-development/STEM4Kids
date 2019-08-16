@@ -1,35 +1,35 @@
 <template>
   <div class="headercomp flex flex-space-between">
-    <div class="flex">
-      <div @click="home" class="flex flex-vert-cent flex-space-around link right-line" id="logo">
-        <div id="logo-icon" class="icon"></div>
+      <div class="flex">
+        <div @click="home" class="flex flex-vert-cent flex-space-around link right-line" id="logo">
+          <div id="logo-icon" class="icon"></div>
+        </div>
+        <div v-bind:class="{active: path.length - 1 == item.index}" @click="pathPush(item.path, item.index)" v-for="item in path" v-bind:key="item.index" class="flex flex-vert-cent flex-space-around link right-line">
+          <p>{{item.name}}</p>
+        </div>
       </div>
-      <div v-bind:class="{active: path.length - 1 == item.index}" @click="pathPush(item.path, item.index)" v-for="item in path" v-bind:key="item.index" class="flex flex-vert-cent flex-space-around link right-line">
-        <p>{{item.name}}</p>
+      <div v-if="user != null" class="flex">
+        <div class="flex flex-vert-cent flex-space-around link left-line" id="files">
+          <div id="files-icon" class="icon left"></div>
+          <p>Code</p>
+        </div>
+        <div class="flex flex-vert-cent flex-space-around link left-line" id="notification">
+          <div id="inbox-icon" class="icon left"></div>
+          <p>Inbox</p>
+        </div>
+        <div @click="profile" class="flex flex-vert-cent flex-space-around link left-line" id="profile">
+          <div id="profile-icon" class="icon left"></div>
+          <p>{{user.username}}</p>
+        </div>
       </div>
-    </div>
-    <div v-if="user != null" class="flex">
-      <div class="flex flex-vert-cent flex-space-around link left-line" id="files">
-        <div id="files-icon" class="icon left"></div>
-        <p>Code</p>
+      <div v-if="user == null" class="flex">
+        <div class="flex flex-vert-cent flex-space-around link left-line" id="register">
+          <p>Register</p>
+        </div>
+        <div class="flex flex-vert-cent flex-space-around link left-line" id="login">
+          <p>Login</p>
+        </div>
       </div>
-      <div class="flex flex-vert-cent flex-space-around link left-line" id="notification">
-        <div id="inbox-icon" class="icon left"></div>
-        <p>Inbox</p>
-      </div>
-      <div @click="profile" class="flex flex-vert-cent flex-space-around link left-line" id="profile">
-        <div id="profile-icon" class="icon left"></div>
-        <p>{{user.username}}</p>
-      </div>
-    </div>
-    <div v-if="user == null" class="flex">
-      <div class="flex flex-vert-cent flex-space-around link left-line" id="register">
-        <p>Register</p>
-      </div>
-      <div class="flex flex-vert-cent flex-space-around link left-line" id="login">
-        <p>Login</p>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -75,8 +75,13 @@ export default {
 .headercomp {
   width: 100vw;
   height: 65px;
+  
   background-color: rgb(255, 255, 255);
-  box-shadow: 0px 3px 3px rgb(190, 190, 190);
+  box-shadow: 0px 3px 3px rgba(190, 190, 190, .8);
+}
+
+#header-div {
+  z-index: 100;
 }
 </style>
 

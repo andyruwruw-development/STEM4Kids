@@ -22,8 +22,10 @@ export default {
     await this.$store.dispatch("pathReset");
     let payload = {path: {name: "Courses", path: "/"}};
     await this.$store.dispatch("pathPush", payload);
-    payload = {path: {name: "Introduction to Python", path: "/course/Introduction%20to%20Python"}};
+    payload = {path: {name: this.$route.params.course, path: "/course/" + this.$route.params.course}};
     await this.$store.dispatch("pathPush", payload);
+    
+    
   },
 }
 </script>
