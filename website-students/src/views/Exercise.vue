@@ -16,7 +16,7 @@ export default {
   },
   async created() {
     payload = {course: this.$route.params.course, chapter: this.$route.params.chapter, section: this.$route.params.section};
-    await this.$store.dispatch("getCourse", payload);
+    await this.$store.dispatch("getExercise", payload);
   }
 }
 </script>

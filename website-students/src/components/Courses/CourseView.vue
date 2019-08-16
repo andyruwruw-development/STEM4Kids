@@ -1,10 +1,10 @@
 <template>
   <div class="courseview">
-    <div id="course-name-div">
+    <div v-if="course != null" id="course-name-div">
       <h1 id="course-name">{{course.name}}</h1>
     </div>
-    <div id="course-list">
-        <div v-for="chapter in courseData.list" v-bind:key="chapter.name" class="chapter-div">
+    <div v-if="course != null" id="course-list">
+        <div v-for="chapter in course.list" v-bind:key="chapter.name" class="chapter-div">
             <div @click="openChapter(chapter.index)" class="chapter-title-div flex flex-vert-cent">
               <div class="chapter-image" v-bind:class="{active : chapter.active, inactive : !chapter.active}"><div v-if="chapter.active" class="tooltip">Enabled</div></div>
               <div class="chapter-title-main-div">
@@ -69,117 +69,22 @@ export default {
       else {
         this.open = -1;
       }
-
     }
   },
   computed: {
     courseData() {
-      return {
-        name: "Introduction to Python",
-        list: 
-        [
-          {
-            title: "Loops",
-            index: 0,
-            active: true,
-            open: false,
-            list: [
-              {
-                title: "Intro to Loops",
-                course: "Introduction to Python",
-                chapter: "Loops",
-                section: 1,
-                active: true,
-                type: "lesson",
-              },
-              {
-                title: "While Loops",
-                course: "Introduction to Python",
-                chapter: "Loops",
-                section: 2,
-                active: true,
-                type: "quiz",
-              },
-              {
-                title: "For Loops",
-                course: "Introduction to Python",
-                chapter: "Loops",
-                section: 3,
-                active: true,
-                type: "exercise",
-              }
-            ]
-          },
-          {
-            title: "Loops",
-            index: 0,
-            active: false,
-            open: false,
-            list: [
-              {
-                title: "Intro to Loops",
-                course: "Introduction to Python",
-                chapter: "Loops",
-                section: 1,
-                active: false,
-                type: "quiz",
-              },
-              {
-                title: "While Loops",
-                course: "Introduction to Python",
-                chapter: "Loops",
-                section: 2,
-                active: false,
-                type: "lesson",
-              },
-              {
-                title: "For Loops",
-                course: "Introduction to Python",
-                chapter: "Loops",
-                section: 3,
-                active: false,
-                type: "exercise",
-              }
-            ]
-          },
-          {
-            title: "Loops",
-            index: 0,
-            active: false,
-            open: false,
-            list: [
-              {
-                title: "Intro to Loops",
-                course: "Introduction to Python",
-                chapter: "Loops",
-                section: 1,
-              },
-              {
-                title: "While Loops",
-                course: "Introduction to Python",
-                chapter: "Loops",
-                section: 2,
-              },
-              {
-                title: "For Loops",
-                course: "Introduction to Python",
-                chapter: "Loops",
-                section: 3,
-              }
-            ]
-          }
-        ],
-      }
-    //return this.$store.state.profile.courses;
+      return this.$store.state.course;
     },
   },
-  created() {
-      this.course = this.courseData;
-      for (var i = 0; i < this.course.list.length; i++)
-      {
-          this.course.list[i].index = i;
-          this.course.list[i].open = false;
-      }
+  async created() {
+    let payload = {course: this.$route.params.course};
+    await this.$store.dispatch("getCourse", payload);
+    this.course = this.courseData;
+    for (var i = 0; i < this.course.list.length; i++)
+    {
+        this.course.list[i].index = i;
+        this.course.list[i].open = false;
+    }
   }
 }
 </script>
@@ -292,9 +197,9 @@ h1 {
 /* Course Items */
 .chapter-item {
     cursor: pointer;
-    margin: 0 auto;
     margin-top: 5px;
     height: 60px;
+    width: 95%;
     padding: 5px;
     background-color: rgb(255, 255, 255);
     border-radius: 10px;
@@ -372,6 +277,7 @@ h1 {
   height: auto;
   max-height: 0px;
   transition: all .2s ease;
+  padding-bottom: 5px;
 }
 
 .expand {

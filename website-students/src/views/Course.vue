@@ -24,8 +24,8 @@ export default {
     await this.$store.dispatch("pathPush", payload);
     payload = {path: {name: this.$route.params.course, path: "/course/" + this.$route.params.course}};
     await this.$store.dispatch("pathPush", payload);
-    payload = {course: this.$route.params.course};
-    await this.$store.dispatch("getCourse", payload);
+    
+    
   },
 }
 </script>

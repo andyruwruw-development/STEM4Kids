@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
+var hardcode = require('./hardcode.js');
 
 Vue.use(Vuex)
 
@@ -68,28 +69,33 @@ export default new Vuex.Store({
     },
 
     async getCourses(context, payload) {
-      let response = await axios.get("/api/course/");
+      //let response = await axios.get("/api/course/");
+      let response = hardcode.courses;
       context.commit('setCourses', response.data);
     },
     async getCourse(context, payload) {
-      let response = await axios.get("/api/course/" + payload.course + "/");
+      //let response = await axios.get("/api/course/" + payload.course + "/");
+      let response = hardcode.course;
       context.commit('setCourse', response.data);
     },
     async getLesson(context, payload) {
-      let response = await axios.get("/api/lesson/" + payload.course + "/" + payload.chapter + "/" + payload.section + "/");
+      //let response = await axios.get("/api/lesson/" + payload.course + "/" + payload.chapter + "/" + payload.section + "/");
+      let response = hardcode.lesson;
       context.commit('setLesson', response.data);
     },
     async getQuiz(context, payload) {
-      let response = await axios.get("/api/qui/" + payload.course + "/" + payload.chapter + "/" + payload.section + "/");
+      //let response = await axios.get("/api/qui/" + payload.course + "/" + payload.chapter + "/" + payload.section + "/");
+      let response = hardcode.quiz;
       context.commit('setQuiz', response.data);
     },
     async getExercise(context, payload) {
-      let response = await axios.get("/api/exercise/" + payload.course + "/" + payload.chapter + "/" + payload.section + "/");
+      //let response = await axios.get("/api/exercise/" + payload.course + "/" + payload.chapter + "/" + payload.section + "/");
+      let response = hardcode.exercise;
       context.commit('setExercise', response.data);
     },
 
     async sendProgress(context, payload) {
-      let response = await axios.post("/api/progress/" + payload.course + "/" + payload.chapter + "/" + payload.section + "/");
+      //let response = await axios.post("/api/progress/" + payload.course + "/" + payload.chapter + "/" + payload.section + "/");
       if (response.data.xp) {
         response = await axios.get("/api/profile/");
         context.commit('setProfile', response.data);

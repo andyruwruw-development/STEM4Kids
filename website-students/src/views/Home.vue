@@ -30,7 +30,7 @@ export default {
     await this.$store.dispatch("pathReset");
     let payload = {path: {name: "Courses", path: "/"}};
     await this.$store.dispatch("pathPush", payload);
-    await this.$store.dispatch("getCourses");
+    
   }
 }
 </script>
