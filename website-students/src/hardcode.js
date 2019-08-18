@@ -107,11 +107,16 @@ module.exports = {
 
     lesson: {
         data: {
-            title: "Loops",
+            title: "Programming (general)",
             course: "Introduction to Python",
             chapter: 1,
             section: 1,
             chaptername: "Stuff",
+            data: [
+                {type: "subtitle", data: "Computer program basics", index: 0},
+                {type: "text", data: "Computer programs are abundant in many <b>people's lives today<b>, carrying out applications on smartphones, tablets, and laptops, powering businesses like Amazon and Netflix, helping cars drive and planes fly, and much more.", index: 1},
+                {type: "paragraph", data: "A computer program consists of instructions executing one at a time. Basic instruction types are:", index: 2}
+            ]
         }
     },
 

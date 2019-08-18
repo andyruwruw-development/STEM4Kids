@@ -2,7 +2,12 @@
   <div class="lesson">
     <PreviousLesson id="top"/>
     <div id="lesson-div">
-
+      <h1 id="title">{{lesson.chapter}}.{{lesson.section}} {{lesson.title}}</h1>
+      <div v-for="item in lesson.data" v-bind:key="item.index">
+        <SubTitle v-if="item.type == 'subtitle'" v-bind:data="item.data" />
+        <Paragraph v-if="item.type == 'paragraph'" v-bind:data="item.data" />
+        <RenderedText v-if="item.type == 'text'" v-bind:text="item.data" />
+      </div>
     </div>
     <NextLesson id="bottom"/>
   </div>
@@ -12,11 +17,18 @@
 import PreviousLesson from '@/components/Lessons/PreviousLesson.vue'
 import NextLesson from '@/components/Lessons/NextLesson.vue'
 
+import SubTitle from '@/components/Lessons/SubTitle.vue'
+import Paragraph from '@/components/Lessons/Paragraph.vue'
+import RenderedText from '@/components/Lessons/Text.vue'
+
 export default {
   name: 'lesson',
   components: {
     PreviousLesson,
-    NextLesson
+    NextLesson,
+    SubTitle,
+    Paragraph,
+    RenderedText
   },
   data() {
       return {
@@ -46,6 +58,8 @@ export default {
     payload = {path: {name: this.lesson.chapter + "." + this.lesson.section + " " + this.lesson.title, path: "/" + this.$route.params.course + "/lesson/" }};
     await this.$store.dispatch("pathPush", payload);
 
+    console.log(this.lesson.data[0]);
+
   }
 }
 </script>
@@ -56,7 +70,7 @@ export default {
   position: relative;
   display: block;
   width: 95%;
-  max-width: 1050px;
+  max-width: 1100px;
   min-height: 500px;
   margin: 0 auto;
 }
@@ -74,9 +88,17 @@ export default {
 #lesson-div {
   display: block;
   margin: 50px 0px;
+  padding: 50px;
   min-height: 500px;
   border-radius: 5px;
   background-color: white;
   box-shadow: 3px 3px 3px rgba(190, 190, 190, .8);
+}
+
+#title {
+  text-align: left;
+  font-weight: bolder;
+  margin: 0;
+  margin-bottom: 35px;
 }
 </style>
