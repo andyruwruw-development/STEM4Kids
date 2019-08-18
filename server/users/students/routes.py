@@ -1,12 +1,14 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from server import db, bcrypt
-from server.users.students.forms import LoginForm, UpdateAccountForm, RegistrationForm, RequestResetForm, ResetPasswordForm
-from server.users.students.utils import savePicture, sendResetEmail
+from server.users.students.forms import LoginForm, UpdateAccountForm, studentRegistrationForm, RequestResetForm, ResetPasswordForm
+from server.users.utils import savePicture, sendResetEmail
 from flask_login import current_user, login_required
-from server.models import User
+from server.models import User # replace with ...
+# from server.users.parents.models import User
 
 student =  Blueprint('student', __name__)
+
 
 @student.route("/api/student/courses/course", methods = ['GET'])
 @login_required
@@ -38,6 +40,7 @@ def getCourseList(course):
                         break
     return output
 
+
 @student.route("/api/student/login", methods = ['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -61,23 +64,25 @@ def logout():
 @student.route("/api/student/account", method = ['GET', 'POST'])
 @login_required
 def studentAccount():
+    # check server/user/students/models.py (class studentUser profile info)
     form = UpdateAccountForm()
     if form.validate_on_submit():
         if form.picture.data:
             picture_file = savePicture(form.picture.data)
             current_user.image_file = picture_file
+            db.student.update_one(
+                {"userID" : current_user.userID},{"$set" : {"imageFile" : current_user.image_file}})
+
         current_user.username = form.username.data
-        current_user.email = form.email.data
-        # db.student.save({})
-        # db.student.update_one({})
-        # db.session.commit()
+        db.student.update_one({"userID" : current_user.userID }, {"$set" : {"username" : current_user.username}})
+        
         flash("Your account has been updated!")
         return redirect(url_for('/api/student/account'))
     elif request.method == 'GET':
         form.username.data =  current_user.username
         form.email.data = current_user.email
     image_file = url_for('static', filename = "profile_pics/" + current_user.image_file)
-    return render_template("/api/student/account/", title = 'Student Account', image_file = image_file, form = form)
+    return render_template("studentAccount.html", title = 'Student Account', image_file = image_file, form = form)
 
 
 @student.route('/reset_password', methods = ['GET', 'POST'])
@@ -104,10 +109,8 @@ def resetToken(token):
     form = ResetPasswordForm()
     if form.validate_on_submit():
         hashedPassword = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user.password = hashedPassword
-        # db.student.update_one({})
-        # filter by student_id, update password 
-        
+        user.password = hashedPassword #does this automatically update user password???
+        db.student.update_one({"userID" : current_user.userID},{"$set" : {"password" : user.password}})        
         flash('Your password has been updated! You are now able to login', 'success')
         return redirect(url_for('user.login'))
     return redirect(url_for('ResetToken.html', title = "Reset Password", form = form))

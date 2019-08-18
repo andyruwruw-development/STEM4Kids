@@ -14,10 +14,11 @@ def load_user(userID):
 # student mapping document PUT IN STUDENT FILE
 class StudentUser(mongoengine.Document,UserMixin):
     meta = {'collection' : 'students'} 
+    
+    userID = mongoengine.StringField(required = True)
 
     # profile information -- server/users/students/forms.py
     #                     -- server/users/students/routes.py (createProfile)
-    userID = mongoengine.StringField(required = True)
     username = mongoengine.StringField(required =  True)
     password = mongoengine.StringField(required = True)
     imageFile = mongoengine.ImageField()

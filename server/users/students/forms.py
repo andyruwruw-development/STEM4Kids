@@ -7,7 +7,7 @@ from server import users, db
 from server.users.students.models import StudentUser
 import random
 
-class RegistrationForm(FlaskForm):
+class studentRegistrationForm(FlaskForm):
     # profile information
     userID =  randomID()
     username = StringField('Username', validators = [DataRequired(), Length(min = 3, max = 10)])
@@ -18,7 +18,6 @@ class RegistrationForm(FlaskForm):
     firstName = StringField('First Name', validators = [DataRequired()])
     lastName = StringField('Last Name', validators= [DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    
     
     submit = SubmitField('Sign Up')
 
