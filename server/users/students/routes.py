@@ -57,6 +57,7 @@ def login():
     return render_template("login.html", title = "Login", form = form)
 
 @student.route("/api/logout")
+@login_required
 def logout():
     logout_user()
     return redirect(url_for("main.home"))
@@ -116,17 +117,21 @@ def resetToken(token):
     return redirect(url_for('ResetToken.html', title = "Reset Password", form = form))
 
 @student.route("/students/lessons/<course>/<chapter>/<section>", methods = ['GET'])
+@login_required
 def notSureWhatThisDoes():
     return 
 
 @student.route("student/quiz/<course>/<chapter>/<section>", methods = ['GET'])
+@login_required
 def dontKnowWhatThisDoes():
     return
 
 @student.route("students/profile", methods = ['GET'])
+@login_required
 def studentProfile():
     return
 
 @student.route("student/xp", methods = ['PUT'])
+@login_required
 def addStudentXP():
     return

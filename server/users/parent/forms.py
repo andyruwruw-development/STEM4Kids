@@ -21,12 +21,14 @@ class parentRegistrationForm(FlaskForm):
     submit = SubmitField('Sign Up')
 
     def validateEmail(self, email) :
-        user = db.students.find_one({"email" : email})
+        # include email regex check 
+        user = db.parents.find_one({"email" : email})
         if user:
             raise ValidationError("That email is taken. Please choose a different one.")
+    
     def validatePhone(self, phone) :
-        if ____:
-            raise ValidationError("Phone number is not valid")
+        # include phone regex check
+        return 
 
 
 class studentRegistrationForm(FlaskForm):
